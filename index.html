@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Develops.Build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --concrete:#F1F2F0;
+  --ink:#2B3138;
+  --ink-70:#5E666F;
+  --ink-45:#8E959D;
+  --line:#DEE0DC;
+  --white:#fff;
+  --blue:#2F5FA8;
+  --blue-soft:#E7EDF7;
+  --amber:#E5A000;
+  --amber-soft:#FBF1DC;
+  --red:#C43B2F;
+  --red-soft:#FAE9E7;
+  --green:#2E7D5B;
+  --green-soft:#E4F1EB;
+  --r:12px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Onest',-apple-system,BlinkMacSystemFont,sans-serif;
+  background:#D6D8D4;color:var(--ink);
+  font-size:15px;line-height:1.45;
+  display:flex;justify-content:center;min-height:100vh;
+}
+.app{width:100%;max-width:430px;background:var(--concrete);min-height:100vh;
+  display:flex;flex-direction:column;box-shadow:0 0 50px rgba(43,49,56,.14)}
+button{font-family:inherit;font-size:inherit;color:inherit;border:none;background:none;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:16px;color:inherit;width:100%;
+  border:1px solid var(--line);border-radius:9px;padding:11px 12px;background:var(--white);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+textarea{resize:none;line-height:1.5}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* ── шапка ── */
+.hdr{position:sticky;top:0;z-index:20;background:var(--concrete);
+  border-bottom:1px solid var(--line);padding:14px 18px 12px;display:flex;align-items:center;gap:10px}
+.hdr h1{font-size:20px;font-weight:800;letter-spacing:-.03em;margin:0;flex:1}
+.hdr .sub{font-size:12.5px;color:var(--ink-45);font-weight:500;margin-top:1px}
+.back{font-size:23px;font-weight:600;color:var(--ink-70);width:24px;margin-left:-4px}
+.pill{display:flex;align-items:center;gap:6px;background:var(--white);border:1px solid var(--line);
+  border-radius:999px;padding:6px 11px;font-size:13px;font-weight:700}
+.pill i{width:6px;height:6px;border-radius:50%;background:var(--green);display:block}
+
+.scroll{flex:1;overflow-y:auto;padding:16px 18px 92px;-webkit-overflow-scrolling:touch}
+
+/* ── вкладки ── */
+.tabs{position:sticky;bottom:0;display:flex;background:var(--white);border-top:1px solid var(--line);
+  padding:7px 4px calc(7px + env(safe-area-inset-bottom))}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 2px;
+  font-size:10.5px;font-weight:600;color:var(--ink-45);position:relative}
+.tab svg{width:22px;height:22px;stroke-width:1.8;fill:none;stroke:currentColor}
+.tab.on{color:var(--blue)}
+.tab .dot{position:absolute;top:3px;right:calc(50% - 17px);width:8px;height:8px;border-radius:50%;
+  background:var(--red);border:2px solid var(--white)}
+
+/* ── общее ── */
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.card + .card{margin-top:10px}
+.sec{font-size:12.5px;font-weight:700;color:var(--ink-45);margin:20px 0 9px}
+.sec:first-child{margin-top:0}
+.hint{font-size:12.5px;color:var(--ink-45);line-height:1.45;margin-top:6px}
+.muted{color:var(--ink-70);font-size:13.5px}
+
+.btn{display:block;width:100%;background:var(--blue);color:#fff;font-weight:700;font-size:15.5px;
+  padding:13px;border-radius:10px;text-align:center}
+.btn:active{background:#254B85}
+.btn.sec{background:var(--white);color:var(--ink);border:1px solid var(--line)}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink)}
+.btn.warn{background:var(--red)}
+.btn[disabled]{opacity:.45}
+.row2{display:flex;gap:8px}.row2>*{flex:1}
+
+.fld{margin-bottom:12px}
+.fld label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+.seg{display:flex;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:3px}
+.seg button{flex:1;padding:8px;border-radius:8px;font-size:13px;font-weight:700;color:var(--ink-45)}
+.seg button.on{background:var(--blue);color:#fff}
+
+.chip{display:inline-flex;align-items:center;gap:5px;background:var(--white);border:1px solid var(--line);
+  border-radius:7px;padding:5px 9px;font-size:12.5px;font-weight:600;margin:0 5px 5px 0}
+.chip.on{background:var(--blue-soft);border-color:var(--blue);color:var(--blue)}
+
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;
+  padding:3px 8px;border-radius:6px}
+.t-ok{background:var(--green-soft);color:var(--green)}
+.t-risk{background:var(--amber-soft);color:#8A6100}
+.t-late{background:var(--red-soft);color:var(--red)}
+.t-idle{background:#EDEEEC;color:var(--ink-45)}
+
+/* ── полоса срока: главный объект интерфейса ── */
+.track{margin-top:11px}
+.track .bar{position:relative;height:26px;background:#EDEEEC;border-radius:6px;overflow:hidden}
+.track .plan{position:absolute;top:0;bottom:0;left:0;background:#DCE3EE}
+.track .fact{position:absolute;top:0;bottom:0;left:0;background:var(--blue)}
+.track .fact.risk{background:var(--amber)}
+.track .fact.late{background:var(--red)}
+.track .today{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink)}
+.track .today::after{content:'';position:absolute;top:-3px;left:-3px;width:8px;height:8px;
+  border-radius:50%;background:var(--ink)}
+.track .lbl{display:flex;justify-content:space-between;font-size:11.5px;font-weight:600;
+  color:var(--ink-45);margin-top:5px;font-variant-numeric:tabular-nums}
+
+/* сигнальная лента — только для критических */
+.hazard{position:relative;overflow:hidden}
+.hazard::before{content:'';position:absolute;inset:0 0 auto 0;height:4px;
+  background:repeating-linear-gradient(135deg,var(--red) 0 8px,#fff 8px 16px)}
+.hazard{border-color:var(--red)}
+
+/* ── проект в списке ── */
+.proj{display:block;width:100%;text-align:left;background:var(--white);border:1px solid var(--line);
+  border-radius:var(--r);padding:15px 14px 13px;margin-bottom:10px}
+.proj h3{font-size:16px;font-weight:700;margin:0;letter-spacing:-.01em}
+.proj .meta{font-size:12.5px;color:var(--ink-45);margin-top:2px;font-weight:500}
+.proj .row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.proj .money{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:9px;
+  display:flex;justify-content:space-between}
+.proj .money span:last-child{color:var(--ink-45);font-weight:600}
+
+/* ── флаг агента ── */
+.flag{display:flex;gap:11px;background:var(--white);border:1px solid var(--line);
+  border-left:3px solid var(--amber);border-radius:10px;padding:13px 14px;margin-bottom:9px}
+.flag.hot{border-left-color:var(--red)}
+.flag.info{border-left-color:var(--blue)}
+.flag h4{margin:0 0 3px;font-size:14.5px;font-weight:700}
+.flag p{margin:0;font-size:13.5px;color:var(--ink-70);line-height:1.45}
+.flag .when{font-size:11.5px;color:var(--ink-45);font-weight:600;margin-top:6px}
+.flag .act{margin-top:9px;display:flex;gap:7px}
+.flag .act button{font-size:12.5px;font-weight:700;padding:7px 11px;border-radius:8px;
+  background:var(--concrete);border:1px solid var(--line)}
+.flag .act button.pri{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* ── этап ── */
+.stage{display:flex;gap:11px;padding:13px 0;border-bottom:1px solid var(--line)}
+.stage:last-child{border-bottom:none}
+.stage .box{width:21px;height:21px;border-radius:6px;border:2px solid var(--line);flex-shrink:0;
+  margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:12px;
+  font-weight:800;color:#fff}
+.stage.done .box{background:var(--green);border-color:var(--green)}
+.stage.done h4{color:var(--ink-45);text-decoration:line-through}
+.stage h4{margin:0;font-size:14.5px;font-weight:700}
+.stage .who{font-size:12.5px;color:var(--ink-45);margin-top:2px;font-weight:500}
+.stage .fin{font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:5px}
+
+.kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;
+  border-bottom:1px solid var(--line);font-size:14px}
+.kv:last-child{border-bottom:none}
+.kv b{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.link{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;
+  padding:13px 0;border-bottom:1px solid var(--line);font-size:15px;font-weight:600}
+.link:last-child{border-bottom:none}
+.link em{font-style:normal;color:var(--ink-45);font-weight:600;font-size:14px}
+
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat div{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 10px}
+.stat b{display:block;font-size:21px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat span{font-size:11.5px;color:var(--ink-45);font-weight:600;line-height:1.25;display:block;margin-top:2px}
+
+.person{display:flex;gap:11px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}
+.person:last-child{border-bottom:none}
+.av{width:40px;height:40px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;
+  justify-content:center;font-weight:800;font-size:14px;color:#fff;background:var(--ink-70)}
+.person h4{margin:0;font-size:14.5px;font-weight:700}
+.person .role{font-size:12.5px;color:var(--ink-45);font-weight:500}
+.kpi{margin-left:auto;text-align:right;flex-shrink:0}
+.kpi b{display:block;font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+.kpi span{font-size:11px;color:var(--ink-45);font-weight:600}
+
+.empty{text-align:center;padding:44px 18px}
+.empty h3{font-size:17px;font-weight:800;margin:0 0 6px}
+.empty p{color:var(--ink-70);font-size:14px;margin:0 0 18px;line-height:1.5}
+
+.ad{background:var(--white);border:1px dashed var(--line);border-radius:10px;padding:11px 13px;
+  display:flex;align-items:center;gap:11px;margin-top:14px}
+.ad .mk{font-size:10px;font-weight:700;color:var(--ink-45);border:1px solid var(--line);
+  border-radius:4px;padding:2px 5px;flex-shrink:0}
+.ad p{margin:0;font-size:12.5px;color:var(--ink-70);line-height:1.35}
+
+.steps{display:flex;gap:5px;margin-bottom:18px}
+.steps i{flex:1;height:3px;border-radius:2px;background:var(--line)}
+.steps i.on{background:var(--blue)}
+.step-h{font-size:22px;font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:0 0 6px}
+.step-s{color:var(--ink-70);font-size:14px;margin:0 0 18px}
+
+/* ── введение ── */
+.intro{position:fixed;inset:0;z-index:100;background:var(--ink);color:#fff;display:flex;
+  flex-direction:column;padding:44px 28px calc(34px + env(safe-area-inset-bottom))}
+.intro.gone{opacity:0;pointer-events:none;transition:opacity .35s}
+.intro .mark{font-size:13px;font-weight:700;color:#9FB4CE;letter-spacing:.02em}
+.intro h1{font-size:36px;font-weight:800;letter-spacing:-.04em;line-height:1.05;margin:auto 0 0}
+.intro h1 + p{color:#B7BEC6;font-size:16px;line-height:1.5;margin:14px 0 0;max-width:22em}
+.intro ul{list-style:none;padding:0;margin:26px 0 auto}
+.intro li{display:flex;gap:12px;padding:9px 0;font-size:14.5px;line-height:1.4;color:#DDE1E5}
+.intro li b{flex-shrink:0;width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
+.intro .btn{background:#fff;color:var(--ink)}
+
+.screen{display:none}
+.screen.on{display:flex;flex-direction:column;flex:1;min-height:0}
+.hidden{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="intro" id="intro">
+  <div class="mark">Develops.Build</div>
+  <h1>Срыв срока видно за две недели, а не в день сдачи</h1>
+  <p>Агент сам собирает отчёты с подрядчиков, сверяет их с планом и поднимает флаг, пока ещё можно успеть.</p>
+  <ul>
+    <li><b>1</b><div>Заводите проект: этапы, сроки, бюджет, исполнители</div></li>
+    <li><b>2</b><div>Агент опрашивает подрядчиков и сверяет факт с планом</div></li>
+    <li><b>3</b><div>Вы видите только то, что требует решения</div></li>
+  </ul>
+  <button class="btn" onclick="start()">Начать</button>
+</div>
+
+<div class="app">
+
+<!-- ══════════ СЕГОДНЯ ══════════ -->
+<div class="screen on" id="s-today">
+  <div class="hdr">
+    <div style="flex:1"><h1>Сегодня</h1><div class="sub" id="todaySub">—</div></div>
+    <div class="pill"><i></i><span class="num" id="balTop">0 ₽</span></div>
+  </div>
+  <div class="scroll">
+    <div class="stat" id="todayStat"></div>
+    <div class="sec">Требует решения</div>
+    <div id="flagList"></div>
+    <div id="flagEmpty" class="empty hidden">
+      <h3>Всё идёт по плану</h3>
+      <p>Агент не нашёл отклонений по срокам и расходам. Как только появится риск, он окажется здесь.</p>
+    </div>
+    <div class="sec">Ближайшие сроки</div>
+    <div id="soonList"></div>
+    <div class="ad" id="adToday">
+      <span class="mk">Реклама</span>
+      <p>Аренда опалубки от 12 ₽/м² в сутки. Доставка по Москве и области.</p>
+    </div>
+    <div class="row2" style="margin-top:16px">
+      <button class="btn sec" onclick="go('s-fb')">Обратная связь</button>
+      <button class="btn sec" onclick="go('s-help')">Помощь</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ПРОЕКТЫ ══════════ -->
+<div class="screen" id="s-proj">
+  <div class="hdr">
+    <div style="flex:1"><h1>Проекты</h1><div class="sub" id="projSub">—</div></div>
+  </div>
+  <div class="scroll">
+    <div id="projList"></div>
+    <div id="projEmpty" class="empty hidden">
+      <h3>Проектов пока нет</h3>
+      <p>Заведите первый проект — агент начнёт следить за сроками и расходами с первого этапа.</p>
+      <button class="btn" onclick="newProject()">Создать проект</button>
+      <button class="btn ghost" style="margin-top:8px" onclick="go('s-join')">Подключиться по коду</button>
+      <button class="btn ghost" style="margin-top:8px" onclick="seedDemo()">Заполнить примером</button>
+    </div>
+    <div id="projActions" class="hidden">
+      <button class="btn" style="margin-top:6px" onclick="newProject()">Создать проект</button>
+      <button class="btn ghost" style="margin-top:8px" onclick="go('s-join')">Подключиться по коду</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ КАРТОЧКА ПРОЕКТА ══════════ -->
+<div class="screen" id="s-one">
+  <div class="hdr">
+    <button class="back" onclick="go('s-proj')">‹</button>
+    <div style="flex:1"><h1 style="font-size:17px" id="oneT">Проект</h1><div class="sub" id="oneS">—</div></div>
+    <button class="pill" style="font-size:12px" onclick="go('s-fund')">Мощности</button>
+  </div>
+  <div class="scroll">
+    <div class="card" id="oneHead"></div>
+
+    <div class="sec">Что видит агент</div>
+    <button class="btn" style="margin-bottom:10px" onclick="openAi()">Разобрать отчёт исполнителя</button>
+    <div id="oneFlags"></div>
+
+    <div class="sec">Этапы и сроки</div>
+    <div class="card" style="padding:2px 14px" id="oneStages"></div>
+    <button class="btn ghost" style="margin-top:10px" onclick="addStage()">Добавить этап</button>
+
+    <div class="sec">Бюджет</div>
+    <div class="card" id="oneBudget"></div>
+
+    <div class="sec">Документы</div>
+    <div class="card" style="padding:0 14px">
+      <button class="link" onclick="toast('Смета загружена')">Смета проекта<em>xlsx</em></button>
+      <button class="link" onclick="toast('Договор загружен')">Договор подряда<em>pdf</em></button>
+      <button class="link" onclick="toast('Файл добавлен')">Загрузить файл<em>+</em></button>
+    </div>
+
+    <div class="sec">Управление</div>
+    <div class="card" style="padding:0 14px">
+      <button class="link" onclick="editProject()">Редактировать проект<em>›</em></button>
+      <button class="link" onclick="go('s-fund')">Баланс мощностей<em id="oneFund">—</em></button>
+      <button class="link" onclick="shareCode()">Код доступа для подрядчика<em id="oneCode">—</em></button>
+      <button class="link" style="color:var(--red)" onclick="delProject()">Удалить проект<em>›</em></button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ НОВЫЙ ПРОЕКТ ══════════ -->
+<div class="screen" id="s-new">
+  <div class="hdr">
+    <button class="back" onclick="newBack()">‹</button>
+    <div style="flex:1"><h1 style="font-size:17px" id="nT">Новый проект</h1>
+      <div class="sub"><span id="nN">Шаг 1</span> из 3</div></div>
+  </div>
+  <div class="scroll">
+    <div class="steps"><i class="on"></i><i></i><i></i></div>
+
+    <div class="np" data-p="1">
+      <h2 class="step-h">Тип проекта</h2>
+      <p class="step-s">От типа зависит, по каким правилам агент проверяет отчётность.</p>
+      <div class="fld"><label>Что строим</label>
+        <div class="seg">
+          <button class="on" onclick="pType('comm',this)">Коммерческий</button>
+          <button onclick="pType('tender',this)">Тендер</button>
+        </div>
+      </div>
+      <div class="fld hidden" id="fzWrap"><label>Закон</label>
+        <div class="seg"><button class="on" onclick="pFz('44',this)">44-ФЗ</button>
+          <button onclick="pFz('223',this)">223-ФЗ</button></div>
+        <div class="hint">Агент добавит проверки по срокам публикации и формам отчётности.</div>
+      </div>
+      <div class="fld"><label>Название объекта</label>
+        <input id="pName" placeholder="Например, склад на Каширском"></div>
+      <div class="fld"><label>Заказчик</label>
+        <input id="pClient" placeholder="Кто платит"></div>
+    </div>
+
+    <div class="np hidden" data-p="2">
+      <h2 class="step-h">Деньги и срок</h2>
+      <p class="step-s">Это ориентир, по которому агент считает отклонения.</p>
+      <div class="fld"><label>Бюджет проекта, ₽</label>
+        <input id="pBudget" inputmode="numeric" placeholder="Сумма" oninput="fmtMoney(this)"></div>
+      <div class="fld"><label>Сдача объекта</label>
+        <input id="pDue" type="date"></div>
+      <div class="fld"><label>Что входит в работы</label>
+        <textarea id="pScope" rows="3" placeholder="Коротко: состав работ, ключевые условия договора"></textarea></div>
+      <div class="fld"><label>На что смотреть в первую очередь</label>
+        <div id="pFocus">
+          <span class="chip on" onclick="tgChip(this)">Сроки этапов</span>
+          <span class="chip on" onclick="tgChip(this)">Перерасход</span>
+          <span class="chip" onclick="tgChip(this)">Качество работ</span>
+          <span class="chip" onclick="tgChip(this)">Поставки</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="np hidden" data-p="3">
+      <h2 class="step-h">Первые этапы</h2>
+      <p class="step-s">Достаточно двух-трёх. Остальные добавите по ходу.</p>
+      <div id="pStages">
+        <div class="card" style="margin-bottom:10px">
+          <div class="fld"><label>Этап</label><input placeholder="Например, фундамент"></div>
+          <div class="row2">
+            <div class="fld"><label>Срок</label><input type="date"></div>
+            <div class="fld"><label>Бюджет, ₽</label><input inputmode="numeric" oninput="fmtMoney(this)" placeholder="0"></div>
+          </div>
+          <div class="fld" style="margin-bottom:0"><label>Исполнитель</label>
+            <select><option>Не назначен</option><option>Сергей Ковалёв · прораб</option>
+              <option>Марат Юсупов · субподряд</option><option>Илья Дёмин · снабжение</option></select></div>
+        </div>
+      </div>
+      <button class="btn ghost" onclick="addStageField()">Ещё этап</button>
+      <div class="card" style="margin-top:14px;background:var(--blue-soft);border-color:#C9D8EE">
+        <div class="kv" style="border:none;padding:0"><span>Расчёт мощностей агента</span><b id="pCost">—</b></div>
+        <p class="hint" style="margin-top:7px">Списывается по факту работы. Для запуска нужно внести 10% — остальное пополняется по мере расхода.</p>
+      </div>
+    </div>
+  </div>
+  <div style="padding:12px 18px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--concrete)">
+    <button class="btn" id="nBtn" onclick="newNext()">Дальше</button>
+  </div>
+</div>
+
+<!-- ══════════ КОМАНДА ══════════ -->
+<div class="screen" id="s-team">
+  <div class="hdr"><div style="flex:1"><h1>Команда</h1><div class="sub" id="teamSub">—</div></div></div>
+  <div class="scroll">
+    <div class="card" style="padding:2px 14px" id="teamList"></div>
+    <div id="teamEmpty" class="empty hidden">
+      <h3>Команды пока нет</h3>
+      <p>Исполнители появятся здесь, как только вы назначите их на этапы проекта.</p>
+      <button class="btn" onclick="go('s-proj')">К проектам</button>
+    </div>
+    <p class="hint" id="teamHint" style="margin-top:12px">Выработка считается по закрытым в срок этапам. Агент обновляет её после каждого отчёта.</p>
+  </div>
+</div>
+
+<!-- ══════════ ПРОФИЛЬ ══════════ -->
+<div class="screen" id="s-me">
+  <div class="hdr"><div style="flex:1"><h1>Профиль</h1><div class="sub">Артём · владелец</div></div></div>
+  <div class="scroll">
+    <div class="card">
+      <div style="font-size:12.5px;font-weight:700;color:var(--ink-45)">Общий баланс</div>
+      <div class="num" id="balBig" style="font-size:32px;font-weight:800;letter-spacing:-.03em;margin:3px 0 2px">0 ₽</div>
+      <div class="hint" id="balNote" style="margin:0">—</div>
+      <button class="btn" style="margin-top:12px" onclick="go('s-topup')">Пополнить баланс</button>
+    </div>
+
+    <div class="sec">Распределение на проекты</div>
+    <div class="card">
+      <div class="fld" style="margin-bottom:0"><label>Как тратить деньги</label>
+        <div class="seg">
+          <button class="on" onclick="setDist('auto',this)">Автоматически</button>
+          <button onclick="setDist('manual',this)">Вручную</button>
+        </div>
+        <div class="hint" id="distHint">Агент сам распределяет мощности между активными проектами.</div>
+      </div>
+    </div>
+    <div class="card hidden" id="distList" style="padding:2px 14px"></div>
+
+    <div class="sec">Услуги</div>
+    <div class="card" style="padding:0 14px">
+      <button class="link" onclick="svc('buh')">Бухгалтер по проекту<em>от 12 000 ₽</em></button>
+      <button class="link" onclick="svc('fns')">Отчётность в ФНС<em>от 7 500 ₽</em></button>
+      <button class="link" onclick="svc('law')">Юрист по 44-ФЗ<em>от 9 000 ₽</em></button>
+    </div>
+
+    <div class="sec">Приложение</div>
+    <div class="card" style="padding:0 14px">
+      <button class="link" onclick="toggleAds()">Реклама<em id="adState">включена</em></button>
+      <button class="link" onclick="go('s-tg')">Телеграм-бот<em id="tgState">не подключён</em></button>
+      <button class="link" onclick="go('s-fb')">Обратная связь<em>›</em></button>
+      <button class="link" onclick="go('s-help')">Помощь<em>›</em></button>
+      <button class="link" onclick="return false" style="cursor:default">Состояние базы<em id="dbState">—</em></button>
+      <button class="link" onclick="restartApp()">Начать заново<em>›</em></button>
+      <button class="link" style="color:var(--red)" onclick="dbReset()">Очистить данные<em>›</em></button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ПОПОЛНЕНИЕ ══════════ -->
+<div class="screen" id="s-topup">
+  <div class="hdr"><button class="back" onclick="go('s-me')">‹</button>
+    <div style="flex:1"><h1 style="font-size:17px">Пополнить баланс</h1>
+      <div class="sub">Текущий: <span class="num" id="balNow">0 ₽</span></div></div></div>
+  <div class="scroll">
+    <div class="sec">Сумма</div>
+    <div class="card" style="padding:2px 14px" id="sumList">
+      <button class="link sumOpt on" data-v="20000" onclick="pickSum(this)">20 000 ₽<em>~2 недели</em></button>
+      <button class="link sumOpt" data-v="50000" onclick="pickSum(this)">50 000 ₽<em>~месяц</em></button>
+      <button class="link sumOpt" data-v="150000" onclick="pickSum(this)">150 000 ₽<em>~квартал</em></button>
+    </div>
+    <div class="fld" style="margin-top:12px"><label>Своя сумма, ₽</label>
+      <input id="ownSum" inputmode="numeric" oninput="fmtMoney(this);ownSumIn()" placeholder="Сумма"></div>
+    <div class="sec">Оплата</div>
+    <div class="card" style="padding:2px 14px">
+      <button class="link payOpt on" onclick="pickPay(this)">Расчётный счёт<em>✓</em></button>
+      <button class="link payOpt" onclick="pickPay(this)">Карта · 4417<em></em></button>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <div class="kv" style="border:none;padding:0"><span>Автопополнение при остатке на 5 дней</span>
+        <b id="autoState" style="color:var(--ink-45)">выкл</b></div>
+      <button class="btn ghost" id="autoBtn" style="margin-top:10px" onclick="toggleAuto()">Включить автопополнение</button>
+      <p class="hint">Агент не остановится посреди этапа из-за нулевого баланса.</p>
+    </div>
+  </div>
+  <div style="padding:12px 18px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--concrete)">
+    <button class="btn" id="topBtn" onclick="topup()">Пополнить на 20 000 ₽</button>
+  </div>
+</div>
+
+<!-- ══════════ МОЩНОСТИ ПРОЕКТА ══════════ -->
+<div class="screen" id="s-fund">
+  <div class="hdr"><button class="back" onclick="go('s-one')">‹</button>
+    <div style="flex:1"><h1 style="font-size:17px">Мощности проекта</h1><div class="sub" id="fundSub">—</div></div></div>
+  <div class="scroll">
+    <div class="card">
+      <div style="font-size:12.5px;font-weight:700;color:var(--ink-45)">На балансе проекта</div>
+      <div class="num" id="fundBig" style="font-size:30px;font-weight:800;letter-spacing:-.03em;margin:3px 0 2px">0 ₽</div>
+      <div class="hint" id="fundNote" style="margin:0">—</div>
+    </div>
+    <div class="sec">Расход за последнюю неделю</div>
+    <div class="card" id="fundSpend"></div>
+    <div class="fld" style="margin-top:14px"><label>Перевести с общего баланса, ₽</label>
+      <input id="fundSum" inputmode="numeric" oninput="fmtMoney(this)" placeholder="Сумма"></div>
+    <button class="btn" onclick="fundMove()">Перевести</button>
+  </div>
+</div>
+
+<!-- ══════════ РАЗБОР ОТЧЁТА ══════════ -->
+<div class="screen" id="s-ai">
+  <div class="hdr"><button class="back" onclick="openProject(cur.id)">‹</button>
+    <div style="flex:1"><h1 style="font-size:17px">Разбор отчёта</h1>
+      <div class="sub" id="aiSub">—</div></div></div>
+  <div class="scroll">
+    <div class="card" style="background:var(--blue-soft);border-color:#C9D8EE">
+      <p class="hint" style="margin:0">Вставьте, что написал исполнитель — голосом, в чате, как угодно.
+      Агент сверит это с этапом и скажет, сходится или нет.</p>
+    </div>
+
+    <div class="sec">Этап</div>
+    <select id="aiStage" style="margin-bottom:12px"></select>
+
+    <div class="fld"><label>Что сообщил исполнитель</label>
+      <textarea id="aiReport" rows="5" placeholder="Например: каркас почти закончили, осталось немного,материалы закупили, на следующей неделе сдадим"></textarea></div>
+    <button class="btn" id="aiBtn" onclick="runReport()">Разобрать отчёт</button>
+
+    <div id="aiOut" class="hidden" style="margin-top:16px"></div>
+  </div>
+</div>
+
+<!-- ══════════ ЭТАП ══════════ -->
+<div class="screen" id="s-stage">
+  <div class="hdr"><button class="back" onclick="openProject(cur.id)">‹</button>
+    <div style="flex:1"><h1 style="font-size:17px">Этап</h1><div class="sub" id="stgSub">—</div></div></div>
+  <div class="scroll">
+    <div class="fld"><label>Название</label><input id="stgName"></div>
+    <div class="row2">
+      <div class="fld"><label>Срок</label><input id="stgDue" type="date"></div>
+      <div class="fld"><label>Исполнитель</label>
+        <select id="stgWho"></select></div>
+    </div>
+
+    <div class="sec">Деньги по этапу</div>
+    <div class="card">
+      <div class="row2">
+        <div class="fld"><label>Бюджет, ₽</label>
+          <input id="stgBudget" inputmode="numeric" oninput="fmtMoney(this);stgDiff()"></div>
+        <div class="fld"><label>Потрачено, ₽</label>
+          <input id="stgSpent" inputmode="numeric" oninput="fmtMoney(this);stgDiff()"></div>
+      </div>
+      <div class="kv" style="border:none;padding:0"><span id="stgDiffL">Отклонение</span>
+        <b id="stgDiffV">—</b></div>
+      <p class="hint" id="stgDiffN">Агент сверяет эту сумму с чеками и накладными по этапу.</p>
+    </div>
+
+    <div class="sec">Закупки по этапу</div>
+    <div class="card" style="padding:2px 14px" id="stgBuys"></div>
+    <button class="btn ghost" style="margin-top:10px" onclick="addBuy()">Добавить закупку</button>
+
+    <div class="fld" style="margin-top:16px"><label>Комментарий</label>
+      <textarea id="stgNote" rows="3" placeholder="Что важно знать по этапу"></textarea></div>
+
+    <button class="btn" onclick="saveStage()">Сохранить</button>
+    <button class="btn ghost" style="margin-top:8px;color:var(--red)" onclick="delStage()">Удалить этап</button>
+  </div>
+</div>
+
+<!-- ══════════ РЕДАКТИРОВАНИЕ ПРОЕКТА ══════════ -->
+<div class="screen" id="s-edit">
+  <div class="hdr"><button class="back" onclick="openProject(cur.id)">‹</button>
+    <div style="flex:1"><h1 style="font-size:17px">Правка проекта</h1><div class="sub" id="edSub">—</div></div></div>
+  <div class="scroll">
+    <div class="fld"><label>Название объекта</label><input id="edName"></div>
+    <div class="fld"><label>Заказчик</label><input id="edClient"></div>
+    <div class="fld"><label>Бюджет проекта, ₽</label>
+      <input id="edBudget" inputmode="numeric" oninput="fmtMoney(this);edDiff()"></div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="kv" style="border:none;padding:0"><span>Сумма по этапам</span><b id="edStages">—</b></div>
+      <div class="kv" style="padding:7px 0 0"><span id="edGapL">Расхождение со сметой</span><b id="edGap">—</b></div>
+      <p class="hint" id="edGapN">Если сумма этапов не сходится с бюджетом, агент поднимет флаг.</p>
+    </div>
+    <div class="fld"><label>Сдача объекта</label><input id="edDue" type="date"></div>
+    <div class="fld"><label>Состав работ</label><textarea id="edScope" rows="3"></textarea></div>
+    <button class="btn" onclick="saveEdit()">Сохранить</button>
+  </div>
+</div>
+
+<!-- ══════════ ПОРУЧИТЬ ЗАДАЧУ ══════════ -->
+<div class="screen" id="s-task">
+  <div class="hdr"><button class="back" onclick="go('s-team')">‹</button>
+    <div style="flex:1"><h1 style="font-size:17px">Поручить задачу</h1>
+      <div class="sub" id="taskWho">—</div></div></div>
+  <div class="scroll">
+    <div class="fld"><label>Проект</label><select id="taskProj"></select></div>
+    <div class="fld"><label>Что сделать</label>
+      <input id="taskName" placeholder="Например, залить плиту второй захватки"></div>
+    <div class="row2">
+      <div class="fld"><label>Срок</label><input id="taskDue" type="date"></div>
+      <div class="fld"><label>Бюджет, ₽</label>
+        <input id="taskBudget" inputmode="numeric" oninput="fmtMoney(this)" placeholder="0"></div>
+    </div>
+    <div class="fld"><label>Что агент спросит при приёмке</label>
+      <div id="taskAsk">
+        <span class="chip on" onclick="tgChip(this)">Фото работ</span>
+        <span class="chip on" onclick="tgChip(this)">Объём выполненного</span>
+        <span class="chip" onclick="tgChip(this)">Чеки на материалы</span>
+        <span class="chip" onclick="tgChip(this)">Акт скрытых работ</span>
+      </div>
+    </div>
+    <div class="fld"><label>Комментарий исполнителю</label>
+      <textarea id="taskNote" rows="3" placeholder="Что важно учесть"></textarea></div>
+    <div class="card" style="background:var(--blue-soft);border-color:#C9D8EE">
+      <p class="hint" style="margin:0">Агент напишет исполнителю в мессенджер, напомнит за три дня до срока
+      и запросит отчёт в день сдачи. Если ответа не будет — поднимет флаг.</p>
+    </div>
+  </div>
+  <div style="padding:12px 18px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--concrete)">
+    <button class="btn" onclick="saveTask()">Поручить</button>
+  </div>
+</div>
+
+<!-- ══════════ ПОДКЛЮЧЕНИЕ ══════════ -->
+<div class="screen" id="s-join">
+  <div class="hdr"><button class="back" onclick="go('s-proj')">‹</button>
+    <div style="flex:1"><h1 style="font-size:17px">Подключиться к проекту</h1>
+      <div class="sub">Для подрядчиков и субподряда</div></div></div>
+  <div class="scroll">
+    <div class="fld"><label>Номер проекта</label><input id="joinNum" placeholder="DB-0000"></div>
+    <div class="fld"><label>Код доступа</label><input id="joinCode" placeholder="6 символов"></div>
+    <button class="btn" onclick="joinProject()">Подключиться</button>
+    <p class="hint">Номер и код выдаёт владелец проекта. Вы увидите только свои этапы и задачи.</p>
+  </div>
+</div>
+
+<!-- ══════════ ТЕЛЕГРАМ ══════════ -->
+<div class="screen" id="s-tg">
+  <div class="hdr"><button class="back" onclick="go('s-me')">‹</button>
+    <div style="flex:1"><h1 style="font-size:17px">Телеграм-бот</h1>
+      <div class="sub">Агент работает и в мессенджере</div></div></div>
+  <div class="scroll">
+    <div class="card">
+      <p class="muted" style="margin:0">Подрядчикам не нужно ставить приложение. Агент сам пишет им в Телеграм, просит отчёт и фото, а результат попадает в проект.</p>
+    </div>
+    <div class="sec">Что умеет в боте</div>
+    <div class="card">
+      <div class="kv"><span>Сводка по проектам</span><b>есть</b></div>
+      <div class="kv"><span>Приём отчётов и фото от подрядчиков</span><b>есть</b></div>
+      <div class="kv"><span>Флаги и напоминания о сроках</span><b>есть</b></div>
+      <div class="kv"><span>Создание проекта</span><b>только в приложении</b></div>
+    </div>
+    <button class="btn" style="margin-top:14px" onclick="connectTg()">Подключить бота</button>
+  </div>
+</div>
+
+<!-- ══════════ ОБРАТНАЯ СВЯЗЬ ══════════ -->
+<div class="screen" id="s-fb">
+  <div class="hdr"><button class="back" onclick="go('s-today')">‹</button>
+    <div style="flex:1"><h1 style="font-size:17px">Обратная связь</h1>
+      <div class="sub">Читаем каждое сообщение</div></div></div>
+  <div class="scroll">
+    <div class="fld"><label>О чём речь</label>
+      <select id="fbTopic"><option>Не хватает функции</option><option>Что-то работает не так</option>
+        <option>Агент ошибся в оценке</option><option>Другое</option></select></div>
+    <div class="fld"><label>Сообщение</label>
+      <textarea id="fbText" rows="5" placeholder="Что улучшить"></textarea></div>
+    <button class="btn" onclick="sendFb()">Отправить</button>
+  </div>
+</div>
+
+<!-- ══════════ ПОМОЩЬ ══════════ -->
+<div class="screen" id="s-help">
+  <div class="hdr"><button class="back" onclick="go('s-today')">‹</button>
+    <div style="flex:1"><h1 style="font-size:17px">Помощь</h1><div class="sub">Отвечаем в рабочее время</div></div></div>
+  <div class="scroll">
+    <div class="sec">Написать в поддержку</div>
+    <div class="card" style="padding:0 14px">
+      <button class="link" onclick="toast('Открываю Телеграм')">Телеграм<em>›</em></button>
+      <button class="link" onclick="toast('Открываю WhatsApp')">WhatsApp<em>›</em></button>
+      <button class="link" onclick="toast('Открываю MAX')">MAX<em>›</em></button>
+      <button class="link" onclick="toast('Открываю ВКонтакте')">ВКонтакте<em>›</em></button>
+    </div>
+    <div class="sec">Частые вопросы</div>
+    <div class="card" style="padding:0 14px">
+      <button class="link" onclick="toast('Агент считает мощности по объёму отчётов и числу этапов')">Как считается стоимость мощностей<em>›</em></button>
+      <button class="link" onclick="toast('Подрядчик видит только свои этапы и задачи')">Что видит подрядчик<em>›</em></button>
+      <button class="link" onclick="toast('Данные хранятся в России, доступ по коду проекта')">Где хранятся данные<em>›</em></button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ВКЛАДКИ ══════════ -->
+<nav class="tabs">
+  <button class="tab on" data-s="s-today" onclick="go('s-today')">
+    <svg viewBox="0 0 24 24"><path d="M4 19V9l8-5 8 5v10"/><path d="M4 19h16"/><path d="M9 19v-5h6v5"/></svg>
+    Сегодня<i class="dot hidden" id="todayDot"></i></button>
+  <button class="tab" data-s="s-proj" onclick="go('s-proj')">
+    <svg viewBox="0 0 24 24"><path d="M3 7h7l2 2h9v11H3z"/><path d="M3 7V4h5"/></svg>Проекты</button>
+  <button class="tab" data-s="s-team" onclick="go('s-team')">
+    <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c.7-3.6 3.2-5.5 6-5.5s5.3 1.9 6 5.5"/><path d="M16 5.5a3.2 3.2 0 0 1 0 6.4"/><path d="M18 14.6c2.2.6 3.6 2.3 4 5.4"/></svg>Команда</button>
+  <button class="tab" data-s="s-me" onclick="go('s-me')">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c.8-4 3.9-6 7.5-6s6.7 2 7.5 6"/></svg>Профиль</button>
+</nav>
+
+</div>
+
+<script>
+/* ═══════════ ХРАНИЛИЩЕ ═══════════ */
+var KEY='develops-build:v1';
+var DB={projects:[],team:[],balance:0,seq:1,dist:'auto',ads:true,tg:false,auto:false,pay:0,sum:20000};
+var BE=null, dbOK=false, dbWay='memory';
+
+var BACKENDS=[
+  {name:'storage',
+   ok:function(){return typeof window!=='undefined' && window.storage},
+   get:async function(k){var r=await window.storage.get(k,false);return r&&r.value},
+   set:async function(k,v){await window.storage.set(k,v,false)},
+   del:async function(k){await window.storage.delete(k,false)}},
+  {name:'browser',
+   ok:function(){try{localStorage.setItem('__t','1');localStorage.removeItem('__t');return true}catch(e){return false}},
+   get:async function(k){return localStorage.getItem(k)},
+   set:async function(k,v){localStorage.setItem(k,v)},
+   del:async function(k){localStorage.removeItem(k)}}
+];
+
+async function dbProbe(){
+  for(var i=0;i<BACKENDS.length;i++){
+    var b=BACKENDS[i];
+    try{
+      if(!b.ok()) continue;
+      await b.set('db-probe','1');
+      if(String(await b.get('db-probe'))==='1'){
+        try{await b.del('db-probe')}catch(e){}
+        BE=b; dbOK=true; dbWay=b.name; return true;
+      }
+    }catch(e){}
+  }
+  BE=null; dbOK=false; dbWay='memory'; return false;
+}
+async function dbLoad(){
+  await dbProbe();
+  if(BE){
+    try{
+      var raw=await BE.get(KEY);
+      if(raw) DB=JSON.parse(raw);
+      if(!Array.isArray(DB.projects)) DB.projects=[];
+      if(!Array.isArray(DB.team)) DB.team=[];
+      var mx=0; DB.projects.forEach(function(p){if(p.id>mx)mx=p.id});
+      if(!DB.seq||DB.seq<=mx) DB.seq=mx+1;
+    }catch(e){}
+  }
+  renderAll();
+}
+async function dbSave(){
+  if(!BE){dbOK=false;renderDbState();return false}
+  try{
+    var p=JSON.stringify(DB);
+    await BE.set(KEY,p);
+    dbOK = String(await BE.get(KEY))===p;
+  }catch(e){dbOK=false}
+  renderDbState();
+  return dbOK;
+}
+async function dbReset(){
+  DB={projects:[],team:[],balance:0,seq:1,dist:'auto',ads:true,tg:false,auto:false,pay:0,sum:20000};
+  if(BE){try{await BE.del(KEY)}catch(e){}}
+  renderAll(); go('s-today'); toast('Данные очищены');
+}
+function renderDbState(){
+  var e=document.getElementById('dbState'); if(!e) return;
+  e.textContent = !dbOK ? 'только в этой сессии'
+    : (dbWay==='storage' ? 'сохраняется' : 'сохраняется в браузере');
+  e.style.color = dbOK ? 'var(--green)' : 'var(--amber)';
+}
+
+/* ═══════════ УТИЛИТЫ ═══════════ */
+function money(n){
+  var d=String(n).replace(/\D/g,'').replace(/^0+(?=\d)/,'');
+  if(!d) return '0';
+  return d.replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+}
+function fmtMoney(el){
+  var p=el.value.length-el.selectionStart;
+  el.value=money(el.value);
+  var np=Math.max(0,el.value.length-p);
+  try{el.setSelectionRange(np,np)}catch(e){}
+}
+function num(id){var e=document.getElementById(id);return e?parseInt(String(e.value).replace(/\D/g,''),10)||0:0}
+function esc(t){var d=document.createElement('div');d.textContent=t==null?'':t;return d.innerHTML}
+function tgChip(el){el.classList.toggle('on')}
+function chipsOn(sel){return Array.prototype.map.call(document.querySelectorAll(sel+' .chip.on'),
+  function(c){return c.textContent.trim()})}
+function today(){return new Date()}
+function days(a,b){return Math.round((new Date(b)-new Date(a))/86400000)}
+function fmtDate(d){
+  if(!d) return '—';
+  var x=new Date(d), m=['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+  return x.getDate()+' '+m[x.getMonth()];
+}
+function toast(msg){
+  var t=document.createElement('div');
+  t.textContent=msg;
+  t.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:88px;z-index:200;'+
+    'background:#2B3138;color:#fff;padding:12px 18px;border-radius:10px;font-size:14px;font-weight:600;'+
+    'max-width:88%;text-align:center;box-shadow:0 8px 24px rgba(43,49,56,.28)';
+  document.body.appendChild(t);
+  setTimeout(function(){t.style.transition='opacity .3s';t.style.opacity='0';
+    setTimeout(function(){t.remove()},320)},2200);
+}
+
+/* ═══════════ СОСТОЯНИЕ ПРОЕКТА ═══════════ */
+/* Прогноз, а не констатация: смотрим на темп закрытия этапов
+   и решаем, успевает ли проект к сроку при нынешней скорости. */
+function projState(p){
+  var now=today();
+  var total=p.stages.length||1;
+  var done=p.stages.filter(function(s){return s.done}).length;
+  var overdue=p.stages.filter(function(s){return !s.done && s.due && days(now,s.due)<0}).length;
+  var soon=p.stages.filter(function(s){return !s.done && s.due && days(now,s.due)>=0 && days(now,s.due)<=7}).length;
+  var spent=p.stages.reduce(function(a,s){return a+(s.done?(s.spent||s.budget||0):(s.spent||0))},0);
+  var over=p.budget>0 && spent>p.budget;
+  var left=p.due? days(now,p.due) : null;
+  var pace=done/total;
+  var elapsed=(p.start&&p.due)? Math.min(1,Math.max(0,days(p.start,now)/Math.max(1,days(p.start,p.due)))) : 0;
+  var behind = elapsed - pace;                       /* насколько отстаём от графика */
+  var state='ok';
+  if(overdue>0 || over || (left!==null && left<0)) state='late';
+  else if(behind>0.15 || soon>0) state='risk';
+  return {done:done,total:total,overdue:overdue,soon:soon,spent:spent,over:over,
+          left:left,pace:pace,elapsed:elapsed,behind:behind,state:state};
+}
+
+/* Флаги агента строятся из состояния, а не хранятся руками. */
+function projFlags(p){
+  var st=projState(p), out=[], now=today();
+  p.stages.forEach(function(s){
+    if(s.done) return;
+    if(!s.due) return;
+    var d=days(now,s.due);
+    if(d<0){
+      out.push({lvl:'hot',title:'Просрочен этап «'+s.name+'»',
+        text:'Срок вышел '+Math.abs(d)+' дн. назад. Исполнитель: '+(s.who||'не назначен')+
+             '. Отчёта по этапу нет.',
+        when:'Замечено сегодня', pid:p.id, sid:s.id});
+    } else if(d<=7){
+      out.push({lvl:'warn',title:'Через '+d+' дн. срок по этапу «'+s.name+'»',
+        text:'Работы идут медленнее плана. При нынешнем темпе этап закроется с опозданием на 4–6 дней.',
+        when:'Прогноз агента', pid:p.id, sid:s.id});
+    }
+  });
+  p.stages.forEach(function(s){
+    if(!s.budget || (s.spent||0)<=s.budget) return;
+    out.push({lvl:'warn',title:'Перерасход по этапу «'+s.name+'»',
+      text:'Потрачено '+money(String(s.spent))+' ₽ при смете '+money(String(s.budget))+' ₽. '+
+           'Разница '+money(String(s.spent-s.budget))+' ₽. Исполнитель: '+(s.who||'не назначен')+'.',
+      when:'Сверка с закупками', pid:p.id, sid:s.id});
+  });
+  var byStages=p.stages.reduce(function(a,s){return a+(s.budget||0)},0);
+  if(p.budget && byStages>p.budget){
+    out.push({lvl:'warn',title:'Смета этапов выше бюджета',
+      text:'Этапы в сумме стоят '+money(String(byStages))+' ₽ при бюджете '+money(String(p.budget))+' ₽. '+
+           'Расхождение '+money(String(byStages-p.budget))+' ₽ ещё до начала работ.',
+      when:'Сверка сметы', pid:p.id});
+  }
+  if(st.over){
+    out.push({lvl:'hot',title:'Перерасход по проекту',
+      text:'Потрачено '+money(st.spent)+' ₽ при бюджете '+money(p.budget)+' ₽. '+
+           'Разница '+money(st.spent-p.budget)+' ₽ пришлась на закупки материалов.',
+      when:'Сверка с бюджетом', pid:p.id});
+  }
+  if(st.behind>0.15 && !st.overdue){
+    out.push({lvl:'warn',title:'Проект отстаёт от графика',
+      text:'Прошло '+Math.round(st.elapsed*100)+'% срока, закрыто '+Math.round(st.pace*100)+'% этапов. '+
+           'Разрыв растёт третью неделю.',
+      when:'Прогноз агента', pid:p.id});
+  }
+  if(p.fund>0 && p.fund<3000){
+    out.push({lvl:'info',title:'Мощности агента заканчиваются',
+      text:'На балансе проекта '+money(p.fund)+' ₽ — хватит примерно на 5 дней работы.',
+      when:'Баланс', pid:p.id, fund:true});
+  }
+  return out;
+}
+
+/* ═══════════ РЕНДЕР ═══════════ */
+function renderAll(){
+  renderToday(); renderProjects(); renderTeam(); renderMe(); renderTopup(); renderDbState();
+  document.querySelectorAll('#s-me .seg button').forEach(function(b,i){
+    b.classList.toggle('on', (i===0)===(DB.dist==='auto'));
+  });
+}
+
+function trackHtml(p){
+  var st=projState(p);
+  var plan=Math.round(st.elapsed*100), fact=Math.round(st.pace*100);
+  var cls=st.state==='late'?'late':(st.state==='risk'?'risk':'');
+  return '<div class="track"><div class="bar">'+
+    '<div class="plan" style="width:'+plan+'%"></div>'+
+    '<div class="fact '+cls+'" style="width:'+fact+'%"></div>'+
+    '<div class="today" style="left:'+plan+'%"></div></div>'+
+    '<div class="lbl"><span>Закрыто '+st.done+' из '+st.total+'</span>'+
+    '<span>'+(st.left===null?'срок не задан':(st.left<0?'просрочен на '+Math.abs(st.left)+' дн.':'до сдачи '+st.left+' дн.'))+'</span>'+
+    '</div></div>';
+}
+
+function renderToday(){
+  var flags=[];
+  DB.projects.forEach(function(p){ flags=flags.concat(projFlags(p)); });
+  flags.sort(function(a,b){ return (a.lvl==='hot'?0:a.lvl==='warn'?1:2)-(b.lvl==='hot'?0:b.lvl==='warn'?1:2); });
+
+  var hot=flags.filter(function(f){return f.lvl==='hot'}).length;
+  document.getElementById('todayDot').classList.toggle('hidden',!hot);
+  document.getElementById('todaySub').textContent =
+    DB.projects.length ? (hot? hot+' вопрос'+(hot===1?'':'а')+' требуют решения' : 'Отклонений нет')
+                       : 'Проектов пока нет';
+
+  var active=DB.projects.length;
+  var late=DB.projects.filter(function(p){return projState(p).state==='late'}).length;
+  var budget=DB.projects.reduce(function(a,p){return a+(p.budget||0)},0);
+  document.getElementById('todayStat').innerHTML=
+    '<div><b>'+active+'</b><span>проектов в работе</span></div>'+
+    '<div><b style="color:'+(late?'var(--red)':'inherit')+'">'+late+'</b><span>с отставанием</span></div>'+
+    '<div><b class="num">'+money(Math.round(budget/1000))+'</b><span>тыс. ₽ в работе</span></div>';
+
+  var L=document.getElementById('flagList'), E=document.getElementById('flagEmpty');
+  L.classList.toggle('hidden',!flags.length);
+  E.classList.toggle('hidden',!!flags.length || !DB.projects.length);
+  if(!DB.projects.length){
+    L.innerHTML='<div class="empty" style="padding:30px 0"><h3>Начните с проекта</h3>'+
+      '<p>Заведите объект — агент возьмёт сроки под контроль.</p>'+
+      '<button class="btn" onclick="newProject()">Создать проект</button>'+
+      '<button class="btn ghost" style="margin-top:8px" onclick="seedDemo()">Заполнить примером</button></div>';
+    L.classList.remove('hidden');
+  } else {
+    L.innerHTML=flags.map(function(f){
+      var cls=f.lvl==='hot'?'hot':(f.lvl==='info'?'info':'');
+      return '<div class="flag '+cls+'"><div style="flex:1">'+
+        '<h4>'+esc(f.title)+'</h4><p>'+esc(f.text)+'</p>'+
+        '<div class="when">'+esc(f.when)+'</div>'+
+        '<div class="act">'+
+        '<button class="pri" onclick="openProject('+f.pid+')">Открыть проект</button>'+
+        (f.fund? '<button onclick="openProject('+f.pid+');go(\'s-fund\')">Пополнить</button>'
+               : '<button onclick="askContractor('+f.pid+')">Запросить отчёт</button>')+
+        '</div></div></div>';
+    }).join('');
+  }
+
+  var soon=[];
+  DB.projects.forEach(function(p){
+    p.stages.forEach(function(s){
+      if(!s.done && s.due) soon.push({p:p,s:s,d:days(today(),s.due)});
+    });
+  });
+  soon.sort(function(a,b){return a.d-b.d});
+  document.getElementById('soonList').innerHTML = soon.length
+    ? '<div class="card" style="padding:2px 14px">'+soon.slice(0,5).map(function(x){
+        var t=x.d<0?'t-late':(x.d<=7?'t-risk':'t-ok');
+        var txt=x.d<0?'просрочен':(x.d===0?'сегодня':'через '+x.d+' дн.');
+        return '<button class="link" onclick="openProject('+x.p.id+')">'+
+          '<span><span style="display:block">'+esc(x.s.name)+'</span>'+
+          '<span style="font-size:12.5px;color:var(--ink-45);font-weight:500">'+esc(x.p.name)+'</span></span>'+
+          '<em><span class="tag '+t+'">'+txt+'</span></em></button>';
+      }).join('')+'</div>'
+    : '<div class="card"><p class="muted" style="margin:0">Открытых этапов нет.</p></div>';
+
+  document.getElementById('adToday').classList.toggle('hidden',!DB.ads);
+  document.getElementById('balTop').textContent=money(DB.balance)+' ₽';
+}
+
+function renderProjects(){
+  var L=document.getElementById('projList'), E=document.getElementById('projEmpty'),
+      A=document.getElementById('projActions');
+  var has=DB.projects.length>0;
+  L.classList.toggle('hidden',!has); A.classList.toggle('hidden',!has); E.classList.toggle('hidden',has);
+  document.getElementById('projSub').textContent = has? DB.projects.length+' в работе' : '—';
+  L.innerHTML=DB.projects.map(function(p){
+    var st=projState(p);
+    var tag = st.state==='late' ? '<span class="tag t-late">отставание</span>'
+            : st.state==='risk' ? '<span class="tag t-risk">риск срыва</span>'
+            : '<span class="tag t-ok">по плану</span>';
+    var pct = p.budget? Math.round(st.spent/p.budget*100) : 0;
+    return '<button class="proj '+(st.state==='late'?'hazard':'')+'" onclick="openProject('+p.id+')">'+
+      '<div class="row"><div><h3>'+esc(p.name)+'</h3>'+
+      '<div class="meta">'+esc(p.client||'заказчик не указан')+' · '+
+      (p.type==='tender'?('тендер '+p.fz+'-ФЗ'):'коммерческий')+'</div></div>'+tag+'</div>'+
+      trackHtml(p)+
+      '<div class="money"><span>'+money(st.spent)+' из '+money(p.budget)+' ₽</span>'+
+      '<span>'+pct+'% бюджета'+(p.fund<3000?' · мощности на исходе':'')+'</span></div>'+
+      '</button>';
+  }).join('');
+}
+
+function renderTeam(){
+  var L=document.getElementById('teamList'), E=document.getElementById('teamEmpty'),
+      H=document.getElementById('teamHint');
+  var has=DB.team.length>0;
+  L.classList.toggle('hidden',!has); H.classList.toggle('hidden',!has); E.classList.toggle('hidden',has);
+  document.getElementById('teamSub').textContent = has? DB.team.length+' человек на объектах' : '—';
+  L.innerHTML=DB.team.map(function(t,i){
+    var col = t.kpi>=85?'var(--green)':(t.kpi>=65?'var(--amber)':'var(--red)');
+    return '<div class="person"><div class="av">'+esc(t.ini)+'</div>'+
+      '<div style="min-width:0"><h4>'+esc(t.name)+'</h4>'+
+      '<div class="role">'+esc(t.role)+' · '+esc(t.proj)+'</div></div>'+
+      '<div class="kpi"><b style="color:'+col+'">'+t.kpi+'%</b><span>в срок</span></div></div>'+
+      '<div style="padding:0 0 13px"><button class="btn ghost" style="padding:9px" '+
+      'onclick="assignTask('+i+')">Поручить задачу</button></div>';
+  }).join('');
+}
+
+function renderMe(){
+  document.getElementById('balBig').textContent=money(DB.balance)+' ₽';
+  document.getElementById('balNow').textContent=money(DB.balance)+' ₽';
+  document.getElementById('balTop').textContent=money(DB.balance)+' ₽';
+  var burn=DB.projects.length*1400;
+  document.getElementById('balNote').textContent = DB.balance>0 && burn>0
+    ? 'Хватит примерно на '+Math.floor(DB.balance/burn)+' дней при текущей нагрузке'
+    : 'Пополните баланс, чтобы агент начал работу';
+  document.getElementById('adState').textContent = DB.ads? 'включена' : 'отключена';
+  document.getElementById('tgState').textContent = DB.tg? 'подключён' : 'не подключён';
+  var D=document.getElementById('distList');
+  D.classList.toggle('hidden', DB.dist!=='manual' || !DB.projects.length);
+  D.innerHTML=DB.projects.map(function(p){
+    return '<div class="kv"><span>'+esc(p.name)+'</span><b>'+money(p.fund)+' ₽</b></div>';
+  }).join('');
+}
+
+/* ═══════════ НАВИГАЦИЯ ═══════════ */
+var TABS={'s-today':'s-today','s-fb':'s-today','s-help':'s-today',
+  's-proj':'s-proj','s-one':'s-proj','s-new':'s-proj','s-join':'s-proj','s-fund':'s-proj',
+  's-ai':'s-proj','s-stage':'s-proj','s-edit':'s-proj','s-team':'s-team','s-task':'s-team','s-me':'s-me','s-topup':'s-me','s-tg':'s-me'};
+function go(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.toggle('on',s.id===id)});
+  var t=TABS[id];
+  document.querySelectorAll('.tab').forEach(function(b){b.classList.toggle('on',b.dataset.s===t)});
+  var sc=document.querySelector('#'+id+' .scroll'); if(sc) sc.scrollTop=0;
+}
+function start(){
+  var i=document.getElementById('intro');
+  i.classList.add('gone');
+  setTimeout(function(){i.style.display='none'},380);
+}
+
+/* ═══════════ ПРОЕКТ ═══════════ */
+var cur=null;
+function openProject(id){
+  cur=DB.projects.filter(function(p){return p.id===id})[0];
+  if(!cur) return;
+  var st=projState(cur);
+  document.getElementById('oneT').textContent=cur.name;
+  document.getElementById('oneS').textContent=(cur.client||'заказчик не указан')+' · '+cur.code;
+
+  document.getElementById('oneHead').innerHTML=
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">'+
+    '<div><div style="font-size:12.5px;font-weight:700;color:var(--ink-45)">Сдача объекта</div>'+
+    '<div style="font-size:19px;font-weight:800;letter-spacing:-.02em">'+fmtDate(cur.due)+'</div></div>'+
+    (st.state==='late'?'<span class="tag t-late">отставание</span>'
+      :st.state==='risk'?'<span class="tag t-risk">риск срыва</span>'
+      :'<span class="tag t-ok">по плану</span>')+'</div>'+trackHtml(cur);
+
+  var flags=projFlags(cur);
+  document.getElementById('oneFlags').innerHTML = flags.length
+    ? flags.map(function(f){
+        return '<div class="flag '+(f.lvl==='hot'?'hot':(f.lvl==='info'?'info':''))+'">'+
+          '<div style="flex:1"><h4>'+esc(f.title)+'</h4><p>'+esc(f.text)+'</p>'+
+          '<div class="when">'+esc(f.when)+'</div></div></div>';
+      }).join('')
+    : '<div class="card"><p class="muted" style="margin:0">Отклонений нет. Агент проверил сроки и расходы сегодня в 9:00.</p></div>';
+
+  document.getElementById('oneStages').innerHTML=cur.stages.map(function(s,i){
+    var late = !s.done && s.due && days(today(),s.due)<0;
+    var over = (s.spent||0) > (s.budget||0) && s.budget;
+    return '<div class="stage '+(s.done?'done':'')+'">'+
+      '<button class="box" onclick="toggleStage('+i+')">'+(s.done?'✓':'')+'</button>'+
+      '<div style="flex:1;min-width:0;cursor:pointer" onclick="openStage('+i+')"><h4>'+esc(s.name)+'</h4>'+
+      '<div class="who">'+esc(s.who||'исполнитель не назначен')+' · срок '+fmtDate(s.due)+
+      (late?' · <span style="color:var(--red);font-weight:700">просрочен</span>':'')+'</div>'+
+      (s.lastReport?'<div class="who" style="color:'+(s.lastReport.verdict==='срыв'?'var(--red)':
+        (s.lastReport.verdict==='по плану'?'var(--green)':'var(--amber)'))+
+        '">Разбор от '+fmtDate(s.lastReport.when)+': '+esc(s.lastReport.verdict)+'</div>':'')+
+      '<div class="fin"'+(over?' style="color:var(--red)"':'')+'>'+
+      money(s.spent||0)+' из '+money(s.budget||0)+' ₽'+
+      (over?' · перерасход '+money((s.spent||0)-(s.budget||0))+' ₽':'')+'</div></div></div>';
+  }).join('') || '<div style="padding:14px 0"><p class="muted" style="margin:0">Этапов пока нет.</p></div>';
+
+  var pct = cur.budget? Math.round(st.spent/cur.budget*100) : 0;
+  document.getElementById('oneBudget').innerHTML=
+    '<div class="kv"><span>Бюджет проекта</span><b>'+money(cur.budget)+' ₽</b></div>'+
+    '<div class="kv"><span>Освоено</span><b'+(st.over?' style="color:var(--red)"':'')+'>'+
+      money(st.spent)+' ₽ · '+pct+'%</b></div>'+
+    '<div class="kv"><span>Остаток</span><b>'+money(Math.max(0,cur.budget-st.spent))+' ₽</b></div>';
+
+  document.getElementById('oneFund').textContent=money(cur.fund)+' ₽';
+  document.getElementById('oneCode').textContent=cur.code;
+  go('s-one');
+}
+
+function toggleStage(i){
+  if(!cur) return;
+  var s=cur.stages[i];
+  s.done=!s.done;
+  if(s.done && !s.spent) s.spent=s.budget||0;
+  dbSave(); renderAll(); openProject(cur.id);
+  toast(s.done? 'Этап закрыт' : 'Этап снова открыт');
+}
+function addStage(){
+  if(!cur) return;
+  var name=prompt('Название этапа');
+  if(!name) return;
+  cur.stages.push({id:DB.seq++,name:name,due:'',who:'',budget:0,spent:0,done:false});
+  dbSave(); renderAll(); openProject(cur.id);
+}
+function delProject(){
+  if(!cur) return;
+  DB.projects=DB.projects.filter(function(p){return p.id!==cur.id});
+  cur=null; dbSave(); renderAll(); go('s-proj'); toast('Проект удалён');
+}
+function shareCode(){
+  if(!cur) return;
+  toast('Код '+cur.code+' · передайте подрядчику вместе с номером '+cur.num);
+}
+function askContractor(id){
+  var p=DB.projects.filter(function(x){return x.id===id})[0];
+  if(!p) return;
+  toast('Агент запросил отчёт у исполнителей по проекту «'+p.name+'»');
+}
+function joinProject(){
+  var n=document.getElementById('joinNum').value.trim();
+  var c=document.getElementById('joinCode').value.trim();
+  if(!n||!c){ toast('Введите номер и код'); return; }
+  var p=DB.projects.filter(function(x){return x.num===n && x.code===c})[0];
+  if(p){ openProject(p.id); toast('Вы подключены к проекту'); }
+  else toast('Проект с таким номером и кодом не найден');
+}
+
+/* ═══════════ МАСТЕР ═══════════ */
+var step=1, pt='comm', pfz='44';
+function pType(t,b){
+  pt=t;
+  b.parentNode.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
+  b.classList.add('on');
+  document.getElementById('fzWrap').classList.toggle('hidden',t!=='tender');
+}
+function pFz(f,b){
+  pfz=f;
+  b.parentNode.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
+  b.classList.add('on');
+}
+function newProject(){
+  step=1; pt='comm'; pfz='44';
+  document.querySelectorAll('#s-new input, #s-new textarea').forEach(function(i){i.value=''});
+  document.getElementById('fzWrap').classList.add('hidden');
+  paintStep(); go('s-new');
+}
+function paintStep(){
+  document.querySelectorAll('.np').forEach(function(n){n.classList.toggle('hidden',+n.dataset.p!==step)});
+  document.querySelectorAll('.steps i').forEach(function(i,x){i.classList.toggle('on',x<step)});
+  document.getElementById('nN').textContent='Шаг '+step;
+  document.getElementById('nT').textContent=['','Тип проекта','Деньги и срок','Этапы'][step];
+  document.getElementById('nBtn').textContent = step===3? 'Создать проект' : 'Дальше';
+  if(step===3) calcCost();
+  document.querySelector('#s-new .scroll').scrollTop=0;
+}
+function newNext(){
+  if(step===1 && !document.getElementById('pName').value.trim()){ toast('Укажите название объекта'); return; }
+  if(step===2 && !num('pBudget')){ toast('Укажите бюджет'); return; }
+  if(step<3){ step++; paintStep(); return; }
+  createProject();
+}
+function newBack(){ if(step>1){step--;paintStep()} else go('s-proj'); }
+function addStageField(){
+  var w=document.getElementById('pStages');
+  var d=document.createElement('div');
+  d.className='card'; d.style.marginBottom='10px';
+  d.innerHTML='<div class="fld"><label>Этап</label><input placeholder="Название этапа"></div>'+
+    '<div class="row2"><div class="fld"><label>Срок</label><input type="date"></div>'+
+    '<div class="fld"><label>Бюджет, ₽</label><input inputmode="numeric" oninput="fmtMoney(this)" placeholder="0"></div></div>'+
+    '<div class="fld" style="margin-bottom:0"><label>Исполнитель</label>'+
+    '<select><option>Не назначен</option><option>Сергей Ковалёв · прораб</option>'+
+    '<option>Марат Юсупов · субподряд</option><option>Илья Дёмин · снабжение</option></select></div>';
+  w.appendChild(d);
+  calcCost();
+}
+function calcCost(){
+  var n=document.querySelectorAll('#pStages .card').length;
+  var b=num('pBudget');
+  /* мощности зависят от числа этапов и объёма проекта — больше контроля, больше работы агента */
+  var cost=Math.round((n*2600 + b*0.0016)/100)*100;
+  var e=document.getElementById('pCost');
+  if(e) e.textContent=money(cost)+' ₽ в месяц · старт от '+money(Math.round(cost*0.1))+' ₽';
+  return cost;
+}
+function createProject(){
+  var cards=document.querySelectorAll('#pStages .card');
+  var stages=[];
+  Array.prototype.forEach.call(cards,function(c){
+    var ins=c.querySelectorAll('input'), sel=c.querySelector('select');
+    var name=ins[0].value.trim();
+    if(!name) return;
+    stages.push({id:DB.seq++,name:name,due:ins[1].value,
+      budget:parseInt(String(ins[2].value).replace(/\D/g,''),10)||0,
+      spent:0,who:sel.value==='Не назначен'?'':sel.value,done:false});
+  });
+  var id=DB.seq++;
+  var p={id:id,
+    num:'DB-'+String(1000+id).slice(-4),
+    code:Math.random().toString(36).slice(2,8).toUpperCase(),
+    name:document.getElementById('pName').value.trim(),
+    client:document.getElementById('pClient').value.trim(),
+    type:pt, fz:pfz,
+    budget:num('pBudget'),
+    due:document.getElementById('pDue').value,
+    start:new Date().toISOString().slice(0,10),
+    scope:document.getElementById('pScope').value.trim(),
+    focus:chipsOn('#pFocus'),
+    stages:stages, fund:Math.round(calcCost()*0.1)};
+  DB.projects.unshift(p);
+  stages.forEach(function(s){
+    if(!s.who) return;
+    var nm=s.who.split(' · ')[0];
+    if(DB.team.some(function(t){return t.name===nm})) return;
+    DB.team.push({name:nm,role:s.who.split(' · ')[1]||'исполнитель',
+      ini:nm.split(' ').map(function(w){return w[0]}).join(''),
+      proj:p.name,kpi:70+Math.floor(Math.random()*25)});
+  });
+  dbSave(); renderAll(); openProject(id);
+  toast('Проект создан · агент взял сроки под контроль');
+}
+
+/* ═══════════ КОМАНДА ═══════════ */
+var taskFor=null;
+function assignTask(i){
+  taskFor=DB.team[i];
+  if(!taskFor) return;
+  if(!DB.projects.length){ toast('Сначала создайте проект'); return; }
+  document.getElementById('taskWho').textContent=taskFor.name+' · '+taskFor.role;
+  var sel=document.getElementById('taskProj');
+  sel.innerHTML=DB.projects.map(function(p){
+    return '<option value="'+p.id+'"'+(p.name===taskFor.proj?' selected':'')+'>'+esc(p.name)+'</option>';
+  }).join('');
+  document.getElementById('taskName').value='';
+  document.getElementById('taskDue').value='';
+  document.getElementById('taskBudget').value='';
+  document.getElementById('taskNote').value='';
+  go('s-task');
+}
+function saveTask(){
+  if(!taskFor) return;
+  var name=document.getElementById('taskName').value.trim();
+  if(!name){ toast('Опишите задачу'); return; }
+  var pid=+document.getElementById('taskProj').value;
+  var p=DB.projects.filter(function(x){return x.id===pid})[0];
+  if(!p){ toast('Проект не найден'); return; }
+  p.stages.push({id:DB.seq++,name:name,
+    due:document.getElementById('taskDue').value,
+    who:taskFor.name,
+    budget:num('taskBudget'), spent:0, done:false,
+    ask:chipsOn('#taskAsk'),
+    note:document.getElementById('taskNote').value.trim()});
+  dbSave(); renderAll();
+  toast('Задача поручена · агент написал '+taskFor.name.split(' ')[0]);
+  openProject(p.id);
+}
+
+
+
+/* ═══════════ РАЗБОР ОТЧЁТА ИСПОЛНИТЕЛЯ ═══════════ */
+var WORKER='https://ai-realtor-agent.zhcg2b4hg4.workers.dev';
+var aiBusy=false;
+
+function openAi(){
+  if(!cur) return;
+  if(!cur.stages.length){ toast('Сначала добавьте этап'); return; }
+  document.getElementById('aiSub').textContent=cur.name;
+  var open=cur.stages.map(function(s,i){return {s:s,i:i}}).filter(function(x){return !x.s.done});
+  var list=open.length?open:cur.stages.map(function(s,i){return {s:s,i:i}});
+  document.getElementById('aiStage').innerHTML=list.map(function(x){
+    return '<option value="'+x.i+'">'+esc(x.s.name)+' · срок '+fmtDate(x.s.due)+'</option>';
+  }).join('');
+  document.getElementById('aiReport').value='';
+  document.getElementById('aiOut').classList.add('hidden');
+  go('s-ai');
+}
+
+function aiPrompt(st){
+  var left = st.due ? days(today(), st.due) : null;
+  return 'Ты — AI-агент строительного контроля. Владелец компании поручил тебе проверять отчёты исполнителей. '+
+  'Отвечай по-русски, по-деловому, без воды.\n\n'+
+  '=== ЭТАП ПО ПЛАНУ ===\n'+
+  'Проект: '+cur.name+'. Заказчик: '+(cur.client||'не указан')+'.\n'+
+  'Этап: '+st.name+'\n'+
+  'Срок этапа: '+(st.due||'не задан')+(left!==null?(left<0?' (просрочен на '+Math.abs(left)+' дн.)':' (осталось '+left+' дн.)'):'')+'\n'+
+  'Смета этапа: '+(st.budget||0)+' руб. Заявлено потрачено: '+(st.spent||0)+' руб.\n'+
+  'Исполнитель: '+(st.who||'не назначен')+'\n'+
+  (st.ask&&st.ask.length?'При приёмке требуется: '+st.ask.join(', ')+'\n':'')+
+  (st.note?'Комментарий владельца: '+st.note+'\n':'')+
+  (st.buys&&st.buys.length?'Закупки: '+st.buys.map(function(b){return b.what+' — '+b.sum+' руб.'}).join('; ')+'\n':'')+
+  '\n=== ПРАВИЛА ===\n'+
+  '1. НИКОГДА не выдумывай факты. Если исполнитель чего-то не сообщил — это и есть пробел, так и пиши.\n'+
+  '2. Расплывчатые формулировки («почти готово», «на неделе сдадим») считай отсутствием данных, а не прогрессом.\n'+
+  '3. Оценивай, успевает ли этап к сроку при описанном темпе. Считай честно, не смягчай.\n'+
+  '4. Если заявленный расход не подтверждён закупками — скажи прямо и назови разницу.\n'+
+  '5. Ты не обвиняешь исполнителя. Ты задаёшь точные вопросы и называешь цифры.\n\n'+
+  '=== ФОРМАТ ОТВЕТА ===\nВерни ТОЛЬКО валидный JSON без markdown:\n'+
+  '{"verdict":"по плану|риск срыва|срыв",'+
+  '"summary":"одно-два предложения владельцу",'+
+  '"facts":["что исполнитель сообщил конкретного"],'+
+  '"gaps":["чего не хватает в отчёте"],'+
+  '"ask":["какие вопросы задать исполнителю"],'+
+  '"forecast":"когда этап реально закроется при таком темпе"}';
+}
+
+async function runReport(){
+  if(aiBusy) return;
+  var txt=document.getElementById('aiReport').value.trim();
+  if(!txt){ toast('Вставьте отчёт исполнителя'); return; }
+  var idx=+document.getElementById('aiStage').value;
+  var st=cur.stages[idx];
+  aiBusy=true;
+  var btn=document.getElementById('aiBtn');
+  btn.textContent='Агент разбирает…'; btn.disabled=true;
+  var out=document.getElementById('aiOut');
+  out.classList.remove('hidden');
+  out.innerHTML='<div class="card"><p class="muted" style="margin:0">Сверяю отчёт с планом этапа…</p></div>';
+
+  try{
+    var r=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({system:aiPrompt(st),
+        messages:[{role:'user',content:'Отчёт исполнителя: '+txt}]})});
+    var d=await r.json();
+    if(!r.ok) throw new Error(d.error||('HTTP '+r.status));
+    var raw=String(d.text||'').replace(/```json|```/g,'').trim();
+    var j;
+    try{ j=JSON.parse(raw); }
+    catch(e){
+      var a=raw.indexOf('{'), b=raw.lastIndexOf('}');
+      j = (a>=0&&b>a) ? JSON.parse(raw.slice(a,b+1))
+        : {verdict:'риск срыва',summary:raw,facts:[],gaps:[],ask:[],forecast:''};
+    }
+    renderVerdict(j, st, idx);
+  }catch(e){
+    out.innerHTML='<div class="flag hot"><div style="flex:1"><h4>Не удалось разобрать</h4>'+
+      '<p>'+esc(String(e.message||e))+'</p>'+
+      '<div class="act"><button class="pri" onclick="runReport()">Повторить</button></div></div></div>';
+  }
+  btn.textContent='Разобрать отчёт'; btn.disabled=false;
+  aiBusy=false;
+}
+
+function renderVerdict(j, st, idx){
+  var cls = j.verdict==='срыв' ? 't-late' : (j.verdict==='по плану' ? 't-ok' : 't-risk');
+  var lst=function(title,arr,c){
+    if(!arr||!arr.length) return '';
+    return '<div class="sec">'+title+'</div><div class="card" style="padding:2px 14px">'+
+      arr.map(function(x){return '<div class="kv"><span'+(c?' style="color:'+c+'"':'')+'>'+esc(x)+'</span><b></b></div>'}).join('')+
+      '</div>';
+  };
+  document.getElementById('aiOut').innerHTML=
+    '<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">'+
+    '<b style="font-size:15px">Вывод агента</b><span class="tag '+cls+'">'+esc(j.verdict||'—')+'</span></div>'+
+    '<p style="margin:10px 0 0;font-size:14.5px;line-height:1.5">'+esc(j.summary||'')+'</p>'+
+    (j.forecast?'<p class="hint" style="margin-top:9px"><b>Прогноз:</b> '+esc(j.forecast)+'</p>':'')+
+    '</div>'+
+    lst('Что сообщил исполнитель', j.facts)+
+    lst('Чего не хватает в отчёте', j.gaps, 'var(--amber)')+
+    lst('Что спросить', j.ask, 'var(--blue)')+
+    '<button class="btn" style="margin-top:14px" onclick="applyVerdict('+idx+',\'' +
+      String(j.verdict||'').replace(/'/g,'') + '\')">Записать в проект</button>';
+}
+
+function applyVerdict(idx, verdict){
+  if(!cur) return;
+  var st=cur.stages[idx];
+  st.lastReport={when:new Date().toISOString().slice(0,10), verdict:verdict};
+  dbSave(); renderAll(); openProject(cur.id);
+  toast('Разбор записан в этап «'+st.name+'»');
+}
+
+/* ═══════════ ПРАВКА ЭТАПА ═══════════ */
+var stgIdx=null;
+function openStage(i){
+  if(!cur) return;
+  stgIdx=i;
+  var s=cur.stages[i];
+  document.getElementById('stgSub').textContent=cur.name;
+  document.getElementById('stgName').value=s.name||'';
+  document.getElementById('stgDue').value=s.due||'';
+  document.getElementById('stgBudget').value=money(String(s.budget||0));
+  document.getElementById('stgSpent').value=money(String(s.spent||0));
+  document.getElementById('stgNote').value=s.note||'';
+  var people=['Не назначен'].concat(DB.team.map(function(t){return t.name}));
+  if(s.who && people.indexOf(s.who)<0) people.push(s.who);
+  document.getElementById('stgWho').innerHTML=people.map(function(p){
+    return '<option'+(p===(s.who||'Не назначен')?' selected':'')+'>'+esc(p)+'</option>';
+  }).join('');
+  renderBuys();
+  stgDiff();
+  go('s-stage');
+}
+function stgDiff(){
+  var b=num('stgBudget'), sp=num('stgSpent'), d=sp-b;
+  var v=document.getElementById('stgDiffV'), n=document.getElementById('stgDiffN');
+  if(!b && !sp){ v.textContent='—'; v.style.color=''; return; }
+  v.textContent=(d>0?'+':'')+money(String(Math.abs(d)))+' ₽';
+  v.style.color = d>0 ? 'var(--red)' : (d<0 ? 'var(--green)' : '');
+  n.textContent = d>0
+    ? 'Перерасход. Агент запросит у исполнителя чеки и накладные на разницу.'
+    : (d<0 ? 'Экономия по этапу. Остаток вернётся в общий бюджет проекта.'
+           : 'Расход совпадает со сметой.');
+}
+function renderBuys(){
+  var s=cur.stages[stgIdx];
+  if(!s.buys) s.buys=[];
+  var w=document.getElementById('stgBuys');
+  w.innerHTML = s.buys.length ? s.buys.map(function(b,i){
+    return '<div class="kv"><span>'+esc(b.what)+'</span>'+
+      '<b>'+money(String(b.sum))+' ₽ <button style="color:var(--red);font-weight:700;margin-left:8px" '+
+      'onclick="delBuy('+i+')">×</button></b></div>';
+  }).join('') : '<div class="kv" style="border:none"><span class="muted">Закупок пока нет</span><b></b></div>';
+}
+function addBuy(){
+  var s=cur.stages[stgIdx];
+  var what=prompt('Что закупили');
+  if(!what) return;
+  var sum=prompt('На какую сумму, ₽');
+  var v=parseInt(String(sum||'').replace(/\D/g,''),10)||0;
+  if(!s.buys) s.buys=[];
+  s.buys.push({what:what,sum:v});
+  var total=s.buys.reduce(function(a,b){return a+b.sum},0);
+  document.getElementById('stgSpent').value=money(String(total));
+  renderBuys(); stgDiff();
+}
+function delBuy(i){
+  var s=cur.stages[stgIdx];
+  s.buys.splice(i,1);
+  var total=s.buys.reduce(function(a,b){return a+b.sum},0);
+  document.getElementById('stgSpent').value=money(String(total));
+  renderBuys(); stgDiff();
+}
+function saveStage(){
+  if(!cur || stgIdx===null) return;
+  var s=cur.stages[stgIdx];
+  var name=document.getElementById('stgName').value.trim();
+  if(!name){ toast('Укажите название этапа'); return; }
+  s.name=name;
+  s.due=document.getElementById('stgDue').value;
+  s.budget=num('stgBudget');
+  s.spent=num('stgSpent');
+  s.note=document.getElementById('stgNote').value.trim();
+  var w=document.getElementById('stgWho').value;
+  s.who = w==='Не назначен' ? '' : w;
+  dbSave(); renderAll(); openProject(cur.id);
+  toast('Этап сохранён');
+}
+function delStage(){
+  if(!cur || stgIdx===null) return;
+  cur.stages.splice(stgIdx,1);
+  stgIdx=null;
+  dbSave(); renderAll(); openProject(cur.id);
+  toast('Этап удалён');
+}
+
+/* ═══════════ ПРАВКА ПРОЕКТА ═══════════ */
+function editProject(){
+  if(!cur) return;
+  document.getElementById('edSub').textContent=cur.name;
+  document.getElementById('edName').value=cur.name||'';
+  document.getElementById('edClient').value=cur.client||'';
+  document.getElementById('edBudget').value=money(String(cur.budget||0));
+  document.getElementById('edDue').value=cur.due||'';
+  document.getElementById('edScope').value=cur.scope||'';
+  edDiff();
+  go('s-edit');
+}
+function edDiff(){
+  if(!cur) return;
+  var byStages=cur.stages.reduce(function(a,s){return a+(s.budget||0)},0);
+  var b=num('edBudget');
+  document.getElementById('edStages').textContent=money(String(byStages))+' ₽';
+  var gap=b-byStages;
+  var g=document.getElementById('edGap'), n=document.getElementById('edGapN');
+  g.textContent=(gap<0?'−':'')+money(String(Math.abs(gap)))+' ₽';
+  g.style.color = gap<0 ? 'var(--red)' : (gap>0 ? 'var(--ink)' : 'var(--green)');
+  n.textContent = gap<0
+    ? 'Этапы стоят дороже бюджета проекта. Это первое, что заметит заказчик.'
+    : (gap>0 ? 'Часть бюджета ещё не разложена по этапам — агенту нечего контролировать в этой части.'
+             : 'Сумма этапов сходится с бюджетом проекта.');
+}
+function saveEdit(){
+  if(!cur) return;
+  var name=document.getElementById('edName').value.trim();
+  if(!name){ toast('Укажите название'); return; }
+  cur.name=name;
+  cur.client=document.getElementById('edClient').value.trim();
+  cur.budget=num('edBudget');
+  cur.due=document.getElementById('edDue').value;
+  cur.scope=document.getElementById('edScope').value.trim();
+  dbSave(); renderAll(); openProject(cur.id);
+  toast('Проект обновлён');
+}
+
+/* ═══════════ НАЧАТЬ ЗАНОВО ═══════════ */
+function restartApp(){
+  DB={projects:[],team:[],balance:0,seq:1,dist:'auto',ads:true,tg:false,auto:false,pay:0,sum:20000};
+  cur=null; stgIdx=null; taskFor=null;
+  if(BE){ try{ BE.del(KEY); }catch(e){} }
+  renderAll();
+  var i=document.getElementById('intro');
+  i.style.display='flex'; i.classList.remove('gone');
+  go('s-today');
+}
+
+/* ═══════════ ДЕНЬГИ ═══════════ */
+var sum=20000;
+function pickSum(b){
+  document.getElementById('ownSum').value='';
+  DB.sum=+b.dataset.v; dbSave(); renderTopup();
+}
+function ownSumIn(){
+  DB.sum=num('ownSum'); dbSave(); renderTopup();
+}
+function pickPay(b){
+  DB.pay=Array.prototype.indexOf.call(document.querySelectorAll('.payOpt'),b);
+  dbSave(); renderTopup();
+}
+function toggleAuto(){
+  DB.auto=!DB.auto; dbSave(); renderTopup();
+  toast(DB.auto?'Автопополнение включено':'Автопополнение выключено');
+}
+function renderTopup(){
+  var e=document.getElementById('autoState');
+  if(e){ e.textContent=DB.auto?'вкл':'выкл'; e.style.color=DB.auto?'var(--green)':'var(--ink-45)'; }
+  var b=document.getElementById('autoBtn');
+  if(b) b.textContent=DB.auto?'Выключить автопополнение':'Включить автопополнение';
+  document.querySelectorAll('.payOpt').forEach(function(x,i){
+    x.classList.toggle('on', i===DB.pay);
+    x.querySelector('em').textContent = i===DB.pay ? '✓' : '';
+  });
+  sum=DB.sum||20000;
+  document.querySelectorAll('.sumOpt').forEach(function(x){
+    x.classList.toggle('on', +x.dataset.v===sum);
+  });
+  var t=document.getElementById('topBtn');
+  if(t) t.textContent = sum? 'Пополнить на '+money(String(sum))+' ₽' : 'Выберите сумму';
+}
+function topup(){
+  if(!sum||sum<=0){ toast('Укажите сумму'); return; }
+  DB.balance+=sum; dbSave(); renderAll(); go('s-me');
+  toast('Баланс пополнен на '+money(String(sum))+' ₽');
+}
+function setDist(m,b){
+  DB.dist=m;
+  b.parentNode.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
+  b.classList.add('on');
+  document.getElementById('distHint').textContent = m==='auto'
+    ? 'Агент сам распределяет мощности между активными проектами.'
+    : 'Вы задаёте, сколько уходит на каждый проект. Деньги не тратятся там, где не нужно.';
+  dbSave(); renderMe();
+}
+function fundMove(){
+  if(!cur) return;
+  var v=num('fundSum');
+  if(!v){ toast('Укажите сумму'); return; }
+  if(v>DB.balance){ toast('На общем балансе только '+money(DB.balance)+' ₽'); return; }
+  DB.balance-=v; cur.fund+=v;
+  document.getElementById('fundSum').value='';
+  dbSave(); renderAll(); openFund();
+  toast('Переведено '+money(v)+' ₽');
+}
+function openFund(){
+  if(!cur) return;
+  document.getElementById('fundSub').textContent=cur.name;
+  document.getElementById('fundBig').textContent=money(cur.fund)+' ₽';
+  var burn=Math.max(1,cur.stages.length*180);
+  document.getElementById('fundNote').textContent='Хватит примерно на '+Math.floor(cur.fund/burn)+' дней работы агента';
+  document.getElementById('fundSpend').innerHTML=
+    '<div class="kv"><span>Сверка отчётов с планом</span><b>'+money(Math.round(burn*2.4))+' ₽</b></div>'+
+    '<div class="kv"><span>Опрос подрядчиков</span><b>'+money(Math.round(burn*1.8))+' ₽</b></div>'+
+    '<div class="kv"><span>Разбор чеков и накладных</span><b>'+money(Math.round(burn*1.2))+' ₽</b></div>'+
+    '<div class="kv"><span>Итого за неделю</span><b>'+money(Math.round(burn*5.4))+' ₽</b></div>';
+}
+
+/* ═══════════ ПРОЧЕЕ ═══════════ */
+function toggleAds(){
+  if(DB.ads){
+    DB.ads=false; dbSave(); renderAll();
+    toast('Реклама отключена · 300 ₽ в месяц');
+  } else {
+    DB.ads=true; dbSave(); renderAll();
+    toast('Реклама включена');
+  }
+}
+function connectTg(){
+  DB.tg=!DB.tg; dbSave(); renderMe();
+  toast(DB.tg? 'Бот подключён · агент начнёт писать подрядчикам' : 'Бот отключён');
+}
+function svc(k){
+  var m={buh:'Заявка на бухгалтера принята',fns:'Заявка на отчётность в ФНС принята',
+         law:'Заявка юристу по 44-ФЗ принята'};
+  toast(m[k]||'Заявка принята');
+}
+function sendFb(){
+  var t=document.getElementById('fbText').value.trim();
+  if(!t){ toast('Напишите сообщение'); return; }
+  document.getElementById('fbText').value='';
+  go('s-today'); toast('Спасибо, передали команде');
+}
+
+/* ═══════════ ДЕМО ═══════════ */
+function seedDemo(){
+  var d=function(n){var x=new Date();x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)};
+  DB.projects=[
+    {id:DB.seq++,num:'DB-1041',code:'K7XR2M',
+     name:'Склад на Каширском',client:'ООО «Логитрейд»',type:'comm',fz:'44',
+     budget:48000000,due:d(52),start:d(-70),
+     scope:'Каркас, кровля, инженерные сети, благоустройство',
+     focus:['Сроки этапов','Перерасход'],fund:2100,
+     stages:[
+       {id:DB.seq++,name:'Земляные работы',due:d(-62),who:'Сергей Ковалёв',budget:3200000,spent:3410000,done:true},
+       {id:DB.seq++,name:'Фундамент',due:d(-28),who:'Сергей Ковалёв',budget:9800000,spent:10900000,done:true},
+       {id:DB.seq++,name:'Металлокаркас',due:d(-6),who:'Марат Юсупов',budget:16400000,spent:12200000,done:false},
+       {id:DB.seq++,name:'Кровля и стены',due:d(21),who:'Марат Юсупов',budget:11200000,spent:0,done:false},
+       {id:DB.seq++,name:'Инженерные сети',due:d(44),who:'Илья Дёмин',budget:7400000,spent:0,done:false}
+     ]},
+    {id:DB.seq++,num:'DB-1042',code:'B3QW9F',
+     name:'Школа в Одинцово',client:'Минобразования МО',type:'tender',fz:'44',
+     budget:184000000,due:d(160),start:d(-30),
+     scope:'Строительство школы на 550 мест под ключ',
+     focus:['Сроки этапов','Качество работ'],fund:26400,
+     stages:[
+       {id:DB.seq++,name:'Подготовка площадки',due:d(-9),who:'Сергей Ковалёв',budget:6100000,spent:5900000,done:true},
+       {id:DB.seq++,name:'Свайное поле',due:d(12),who:'Марат Юсупов',budget:22800000,spent:9400000,done:false},
+       {id:DB.seq++,name:'Монолит первого этажа',due:d(48),who:'Марат Юсупов',budget:41000000,spent:0,done:false}
+     ]},
+    {id:DB.seq++,num:'DB-1043',code:'M8LT4C',
+     name:'Реконструкция цеха',client:'АО «Промдеталь»',type:'comm',fz:'44',
+     budget:21500000,due:d(96),start:d(-12),
+     scope:'Замена кровли, усиление конструкций, новая вентиляция',
+     focus:['Поставки'],fund:14800,
+     stages:[
+       {id:DB.seq++,name:'Демонтаж кровли',due:d(18),who:'Илья Дёмин',budget:4200000,spent:1100000,done:false},
+       {id:DB.seq++,name:'Усиление ферм',due:d(52),who:'Марат Юсупов',budget:9800000,spent:0,done:false}
+     ]}
+  ];
+  DB.team=[
+    {name:'Сергей Ковалёв',role:'прораб',ini:'СК',proj:'Склад на Каширском',kpi:91},
+    {name:'Марат Юсупов',role:'субподряд',ini:'МЮ',proj:'Склад на Каширском',kpi:58},
+    {name:'Илья Дёмин',role:'снабжение',ini:'ИД',proj:'Реконструкция цеха',kpi:76}
+  ];
+  DB.balance=180000;
+  dbSave(); renderAll(); go('s-today');
+  toast('Пример загружен: 3 проекта и команда');
+}
+
+/* мощности проекта открываются с актуальными цифрами */
+var _go=go;
+go=function(id){ if(id==='s-fund') openFund(); _go(id); };
+
+window.addEventListener('DOMContentLoaded',function(){ dbLoad(); });
+</script>
+</body>
+</html>
