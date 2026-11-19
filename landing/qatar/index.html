@@ -322,9 +322,14 @@ document.getElementById("lead").addEventListener("submit", async e => {
   e.preventDefault();
   const f = e.target, err = document.getElementById("err"), btn = document.getElementById("submit");
   const data = Object.fromEntries(new FormData(f).entries());
-  const okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email || "");
-  const filled = ["name","company","role","sites","phone","email"].every(k => (data[k] || "").trim());
-  if (!filled || !okEmail || !document.getElementById("consent").checked) { err.style.display = "block"; return; }
+  const labels = { name: "your name", company: "your company", role: "your role", sites: "the number of active sites", phone: "your phone", email: "your email" };
+  const missing = Object.keys(labels).find(k => !(data[k] || "").trim());
+  let msg = "";
+  if (missing) msg = "Please enter " + labels[missing] + ".";
+  else if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(data.email.trim())) msg = "Please enter a valid email, e.g. name@company.com.";
+  else if ((data.phone.match(/\d/g) || []).length < 7) msg = "Please enter a valid phone number.";
+  else if (!document.getElementById("consent").checked) msg = "Please tick the consent box.";
+  if (msg) { err.textContent = msg; err.style.display = "block"; const f0 = missing ? document.getElementById(missing) : null; if (f0) f0.focus(); return; }
   err.style.display = "none"; btn.disabled = true; btn.textContent = "Sending…";
   const lead = { ...data, market: MARKET, sid, utm, page: location.href, ts: new Date().toISOString() };
   try {
