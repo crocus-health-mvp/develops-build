@@ -61,11 +61,23 @@ export default {
         try {
           await fetch(`https://api.telegram.org/bot${env.TG_TOKEN}/sendMessage`, {
             method: "POST", headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ chat_id: env.TG_CHAT, text }),
+            body: JSON.stringify({ chat_id: String(env.TG_CHAT).trim(), text }),
           });
         } catch (e) { /* заявка уже сохранена — уведомление не критично */ }
       }
       return json({ ok: true }, 200, h);
+    }
+
+    // Проверка отправки в Telegram: показывает ответ Telegram как есть
+    if (req.method === "GET" && url.pathname === "/tg-test") {
+      if (!env.ADMIN_KEY || url.searchParams.get("key") !== env.ADMIN_KEY) return json({ ok: false }, 403, h);
+      const state = { TG_TOKEN: !!env.TG_TOKEN, TG_CHAT: env.TG_CHAT ? String(env.TG_CHAT) : null };
+      if (!env.TG_TOKEN || !env.TG_CHAT) return json({ ok: false, secrets: state }, 400, h);
+      const r = await fetch(`https://api.telegram.org/bot${env.TG_TOKEN}/sendMessage`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: String(env.TG_CHAT).trim(), text: "✅ Тест: воркер Develops на связи" }),
+      });
+      return json({ secrets: state, telegram: await r.json() }, 200, h);
     }
 
     // Найти ID чатов, куда добавлен бот (для настройки TG_CHAT)
