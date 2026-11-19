@@ -14,7 +14,7 @@ function cors(req) {
     "Access-Control-Allow-Headers": "Content-Type",
   };
 }
-const json = (obj, status, h) => new Response(JSON.stringify(obj), { status, headers: { "Content-Type": "application/json", ...h } });
+const json = (obj, status, h) => new Response(JSON.stringify(obj), { status, headers: { "Content-Type": "application/json; charset=utf-8", ...h } });
 const day = () => new Date().toISOString().slice(0, 10);
 const clip = (s, n = 200) => String(s ?? "").slice(0, n);
 
