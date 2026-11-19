@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Develops Analysis — every site under control | Qatar pilot</title>
+<meta name="description" content="AI agent for construction companies in Qatar: progress, quality, money and people on every site in one view. Join the Qatar pilot.">
+<meta property="og:title" content="Develops Analysis — every site under control">
+<meta property="og:description" content="AI agent for construction companies in Qatar. Join the pilot.">
+<style>
+:root{
+  --ink:#0f1720; --ink2:#46525f; --line:#e3e7ec; --bg:#f6f7f9; --card:#fff;
+  --navy:#0c1b2a; --navy2:#13283d; --amber:#f2a516; --amber2:#ffbf3c; --ok:#1f9d63; --warn:#e0861a; --bad:#d6453d;
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:#fff;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--amber);color:#111;font-weight:800;font-size:16px;padding:15px 24px;border-radius:12px;text-decoration:none;border:0;cursor:pointer;transition:transform .15s,background .15s}
+.btn:hover{background:var(--amber2);transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35)}
+.tag{display:inline-block;font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--amber)}
+h1{font-size:clamp(34px,6vw,58px);line-height:1.05;letter-spacing:-1.5px;font-weight:900}
+h2{font-size:clamp(26px,4vw,38px);line-height:1.12;letter-spacing:-.8px;font-weight:850;margin:10px 0 14px}
+.lead{font-size:clamp(17px,2.2vw,20px);color:var(--ink2);max-width:640px}
+section{padding:72px 0}
+
+/* header */
+header{position:sticky;top:0;z-index:20;background:rgba(12,27,42,.92);backdrop-filter:blur(8px)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{color:#fff;font-weight:900;font-size:19px;letter-spacing:-.3px;text-decoration:none}
+.logo span{color:var(--amber)}
+header .btn{padding:10px 16px;font-size:14px}
+
+/* hero */
+.hero{background:radial-gradient(1200px 500px at 85% -10%,#1d3a56 0,transparent 60%),var(--navy);color:#fff;padding:64px 0 76px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.hero .lead{color:#c9d3de;margin:18px 0 28px}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
+.hero .note{margin-top:16px;font-size:14px;color:#9fb0c2}
+.panel{background:var(--navy2);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.panel-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:13px;color:#9fb0c2}
+.panel-h b{color:#fff;font-size:15px}
+.site{background:rgba(255,255,255,.04);border-radius:12px;padding:12px 14px;margin-top:10px}
+.site-n{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:10px}
+.site-n em{font-style:normal;font-size:12px;font-weight:700;padding:2px 8px;border-radius:20px}
+.scales{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sc{font-size:11px;color:#9fb0c2}
+.bar{height:6px;background:rgba(255,255,255,.1);border-radius:6px;margin-top:5px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.demo{font-size:11px;color:#7f93a8;margin-top:12px;text-align:center}
+
+/* pain */
+.pain{background:var(--bg)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+.card h3{font-size:19px;margin-bottom:8px;letter-spacing:-.2px}
+.card p{color:var(--ink2);font-size:15.5px}
+.ico{width:42px;height:42px;border-radius:11px;background:#fff4dc;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+
+/* scales */
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:30px}
+.scale{border-radius:var(--r);padding:22px;border:1px solid var(--line);position:relative;overflow:hidden}
+.scale:before{content:"";position:absolute;left:0;top:0;right:0;height:4px;background:var(--amber)}
+.scale .num{font-size:13px;font-weight:800;color:var(--amber);letter-spacing:1px}
+.scale h3{font-size:20px;margin:6px 0 8px}
+.scale p{font-size:15px;color:var(--ink2)}
+
+/* how */
+.how{background:var(--navy);color:#fff}
+.how .lead{color:#c9d3de}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+.step{background:var(--navy2);border-radius:var(--r);padding:24px;border:1px solid rgba(255,255,255,.07)}
+.step b{display:inline-flex;width:34px;height:34px;border-radius:50%;background:var(--amber);color:#111;align-items:center;justify-content:center;font-weight:900;margin-bottom:12px}
+.step h3{font-size:19px;margin-bottom:6px}
+.step p{color:#c9d3de;font-size:15px}
+
+/* who + pilot */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:30px}
+.list{list-style:none}
+.list li{padding:12px 0 12px 32px;border-bottom:1px solid var(--line);position:relative;font-size:16px}
+.list li:before{content:"";position:absolute;left:4px;top:17px;width:14px;height:14px;border-radius:4px;background:var(--amber)}
+
+/* form */
+.formsec{background:var(--bg)}
+.formbox{display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;align-items:start}
+form{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 14px 40px rgba(15,23,32,.06)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{display:block;font-size:13px;font-weight:700;color:var(--ink2);margin:12px 0 6px}
+input,select{width:100%;font:inherit;font-size:16px;padding:13px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);outline:none}
+input:focus,select:focus{border-color:var(--amber)}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink2);margin:16px 0}
+.consent input{width:18px;height:18px;margin-top:2px;flex:none}
+form .btn{width:100%;margin-top:6px}
+.err{color:var(--bad);font-size:14px;margin-top:10px;display:none}
+.ok{display:none;text-align:center;padding:30px 10px}
+.ok h3{font-size:24px;margin-bottom:8px}
+.ok p{color:var(--ink2)}
+
+footer{background:var(--navy);color:#9fb0c2;font-size:14px;padding:28px 0}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+.sticky-cta{display:none}
+@media (max-width:900px){
+  .hero .wrap,.formbox,.two{grid-template-columns:1fr}
+  .grid3,.steps{grid-template-columns:1fr}
+  .grid4{grid-template-columns:1fr 1fr}
+  section{padding:56px 0}
+  .sticky-cta{display:block;position:fixed;left:12px;right:12px;bottom:12px;z-index:30}
+  .sticky-cta .btn{width:100%;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  footer{padding-bottom:86px}
+}
+@media (max-width:480px){.row2{grid-template-columns:1fr}.scales{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#top">Develops<span>.</span>Analysis</a>
+    <a class="btn" href="#pilot" data-ev="cta_header">Join the pilot</a>
+  </div>
+</header>
+
+<div class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <span class="tag">Pilot in Qatar · limited spots</span>
+      <h1 style="margin-top:14px">Every site under control. Even when you are not there.</h1>
+      <p class="lead">Develops Analysis is an AI agent for construction companies. It tracks progress, quality, money and people on every site — and shows the owner the real picture, not the report.</p>
+      <div class="ctas">
+        <a class="btn" href="#pilot" data-ev="cta_hero">Join the Qatar pilot →</a>
+        <a class="btn ghost" href="#how" data-ev="cta_how">How it works</a>
+      </div>
+      <p class="note">We are selecting construction companies in Qatar to shape the product with us.</p>
+    </div>
+    <div class="panel" aria-label="Product preview">
+      <div class="panel-h"><b>Owner view</b><span>3 active sites</span></div>
+      <div class="site">
+        <div class="site-n">Site A · Residential <em style="background:rgba(31,157,99,.18);color:#5fd49c">On track</em></div>
+        <div class="scales">
+          <div class="sc">Progress<div class="bar"><i style="width:72%;background:#5fd49c"></i></div></div>
+          <div class="sc">Quality<div class="bar"><i style="width:88%;background:#5fd49c"></i></div></div>
+          <div class="sc">Money<div class="bar"><i style="width:64%;background:#5fd49c"></i></div></div>
+          <div class="sc">People<div class="bar"><i style="width:80%;background:#5fd49c"></i></div></div>
+        </div>
+      </div>
+      <div class="site">
+        <div class="site-n">Site B · Commercial <em style="background:rgba(224,134,26,.2);color:#ffb35c">Delay risk</em></div>
+        <div class="scales">
+          <div class="sc">Progress<div class="bar"><i style="width:41%;background:#ffb35c"></i></div></div>
+          <div class="sc">Quality<div class="bar"><i style="width:76%;background:#5fd49c"></i></div></div>
+          <div class="sc">Money<div class="bar"><i style="width:83%;background:#ffb35c"></i></div></div>
+          <div class="sc">People<div class="bar"><i style="width:55%;background:#ffb35c"></i></div></div>
+        </div>
+      </div>
+      <div class="site">
+        <div class="site-n">Site C · Villa <em style="background:rgba(214,69,61,.2);color:#ff8a82">Over budget</em></div>
+        <div class="scales">
+          <div class="sc">Progress<div class="bar"><i style="width:58%;background:#5fd49c"></i></div></div>
+          <div class="sc">Quality<div class="bar"><i style="width:69%;background:#ffb35c"></i></div></div>
+          <div class="sc">Money<div class="bar"><i style="width:96%;background:#ff8a82"></i></div></div>
+          <div class="sc">People<div class="bar"><i style="width:74%;background:#5fd49c"></i></div></div>
+        </div>
+      </div>
+      <p class="demo">Interface preview · demo data</p>
+    </div>
+  </div>
+</div>
+
+<section class="pain">
+  <div class="wrap">
+    <span class="tag">The problem</span>
+    <h2>Growth breaks control</h2>
+    <p class="lead">One site — the owner sees everything. Three sites — he controls only what he sees today.</p>
+    <div class="grid3">
+      <div class="card">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c98200" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3>Delays you learn about too late</h3>
+        <p>Reports say "on schedule" until the week the deadline is missed.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c98200" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
+        <h3>Costs that drift</h3>
+        <p>Purchases and spend are checked against the budget after the money is gone.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c98200" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 010 7M21.5 20c-.5-2.6-2-4.4-4-5.1"/></svg></div>
+        <h3>People you can't see</h3>
+        <p>Strong specialists are rare. Without data you don't know who really delivers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="tag">The solution</span>
+    <h2>Four scales for every site</h2>
+    <p class="lead">The AI agent works on the owner's side: it compares what happens on site with the plan and budget, and shows where to act.</p>
+    <div class="grid4">
+      <div class="scale"><div class="num">01</div><h3>Progress</h3><p>Real readiness of each site in percent, against the schedule.</p></div>
+      <div class="scale"><div class="num">02</div><h3>Quality</h3><p>Work checked step by step, so issues surface before they are hidden.</p></div>
+      <div class="scale"><div class="num">03</div><h3>Money</h3><p>Spend and purchases against the budget — with a forecast forward.</p></div>
+      <div class="scale"><div class="num">04</div><h3>People</h3><p>Who delivers, who slows down, who deserves promotion.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="wrap">
+    <span class="tag">How it works</span>
+    <h2>The site brings the data. The system checks and looks ahead.</h2>
+    <div class="steps">
+      <div class="step"><b>1</b><h3>The site team reports</h3><p>Foremen send updates, photos and purchases to the AI agent in a messenger — no new software to learn.</p></div>
+      <div class="step"><b>2</b><h3>The agent checks</h3><p>Every update is compared with the plan, the budget and the quality checklist.</p></div>
+      <div class="step"><b>3</b><h3>The owner decides</h3><p>Four scales per site and early alerts — where it's late, where money leaks, who needs attention.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="tag">For whom</span>
+    <h2>Built for growing construction companies</h2>
+    <div class="two">
+      <ul class="list">
+        <li>Construction companies with 20–200 people</li>
+        <li>Several active sites at the same time</li>
+        <li>Owners and directors who can't be on every site</li>
+        <li>Developers who want transparency from contractors</li>
+      </ul>
+      <div class="card">
+        <h3>What the pilot gives you</h3>
+        <ul class="list" style="margin-top:6px">
+          <li>Setup on your sites together with your team</li>
+          <li>The four scales on your real projects</li>
+          <li>Direct line to the founders — the product is shaped around your needs</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="formsec" id="pilot">
+  <div class="wrap formbox">
+    <div>
+      <span class="tag">Qatar pilot</span>
+      <h2>Apply for a pilot spot</h2>
+      <p class="lead">Leave your details — the founders will contact you within 2 working days to discuss your sites.</p>
+    </div>
+    <form id="lead" novalidate>
+      <div id="fields">
+        <div class="row2">
+          <div><label for="name">Your name</label><input id="name" name="name" autocomplete="name" required></div>
+          <div><label for="company">Company</label><input id="company" name="company" autocomplete="organization" required></div>
+        </div>
+        <div class="row2">
+          <div><label for="role">Your role</label>
+            <select id="role" name="role" required>
+              <option value="">Choose…</option><option>Owner / CEO</option><option>Director / GM</option><option>Project manager</option><option>Developer</option><option>Other</option>
+            </select></div>
+          <div><label for="sites">Active sites now</label>
+            <select id="sites" name="sites" required>
+              <option value="">Choose…</option><option>1</option><option>2–3</option><option>4–10</option><option>10+</option>
+            </select></div>
+        </div>
+        <div class="row2">
+          <div><label for="phone">Phone / WhatsApp</label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+974" required></div>
+          <div><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+        </div>
+        <label class="consent"><input type="checkbox" id="consent" required> I agree that Develops may contact me about the pilot and process my details for this purpose.</label>
+        <button class="btn" type="submit" id="submit">Apply for the pilot</button>
+        <p class="err" id="err">Please fill in all fields and confirm the consent.</p>
+      </div>
+      <div class="ok" id="ok">
+        <h3>Thank you!</h3>
+        <p>Your application is in. The founders will contact you within 2 working days.</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© Develops · develops.build</span>
+    <span>Qatar pilot program</span>
+  </div>
+</footer>
+
+<div class="sticky-cta"><a class="btn" href="#pilot" data-ev="cta_sticky">Join the Qatar pilot</a></div>
+
+<script>
+/* ===== Настройки: меняются в одном месте ===== */
+const LEAD_ENDPOINT = ""; // URL Cloudflare-воркера, например "https://develops-leads.<аккаунт>.workers.dev"
+const MARKET = "qatar";   // для дубайской версии — "dubai"
+/* ============================================= */
+
+const params = new URLSearchParams(location.search);
+const utm = {};
+["utm_source","utm_medium","utm_campaign","utm_content","utm_term","fbclid"].forEach(k => { if (params.get(k)) utm[k] = params.get(k); });
+let sid = "";
+try { sid = sessionStorage.getItem("dv_sid") || ""; if (!sid) { sid = Math.random().toString(36).slice(2) + Date.now().toString(36); sessionStorage.setItem("dv_sid", sid); } } catch (e) {}
+
+function track(ev) {
+  try { (window.dataLayer = window.dataLayer || []).push({ event: ev, market: MARKET }); } catch (e) {}
+  try { if (window.fbq) fbq("trackCustom", ev); } catch (e) {}
+  if (!LEAD_ENDPOINT) return;
+  const body = JSON.stringify({ ev, market: MARKET, sid, src: utm.utm_source || "direct", campaign: utm.utm_campaign || "" });
+  try { navigator.sendBeacon ? navigator.sendBeacon(LEAD_ENDPOINT + "/event", body) : fetch(LEAD_ENDPOINT + "/event", { method: "POST", body, keepalive: true }); } catch (e) {}
+}
+
+track("view");
+document.querySelectorAll("[data-ev]").forEach(a => a.addEventListener("click", () => track(a.dataset.ev)));
+
+let started = false;
+document.getElementById("lead").addEventListener("input", () => { if (!started) { started = true; track("form_start"); } });
+
+document.getElementById("lead").addEventListener("submit", async e => {
+  e.preventDefault();
+  const f = e.target, err = document.getElementById("err"), btn = document.getElementById("submit");
+  const data = Object.fromEntries(new FormData(f).entries());
+  const okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email || "");
+  const filled = ["name","company","role","sites","phone","email"].every(k => (data[k] || "").trim());
+  if (!filled || !okEmail || !document.getElementById("consent").checked) { err.style.display = "block"; return; }
+  err.style.display = "none"; btn.disabled = true; btn.textContent = "Sending…";
+  const lead = { ...data, market: MARKET, sid, utm, page: location.href, ts: new Date().toISOString() };
+  try {
+    if (LEAD_ENDPOINT) {
+      const r = await fetch(LEAD_ENDPOINT + "/lead", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(lead) });
+      if (!r.ok) throw new Error("bad status");
+    } else {
+      try { const all = JSON.parse(localStorage.getItem("dv_leads") || "[]"); all.push(lead); localStorage.setItem("dv_leads", JSON.stringify(all)); } catch (x) {}
+    }
+    track("lead");
+    try { if (window.fbq) fbq("track", "Lead"); } catch (x) {}
+    document.getElementById("fields").style.display = "none";
+    document.getElementById("ok").style.display = "block";
+  } catch (x) {
+    btn.disabled = false; btn.textContent = "Apply for the pilot";
+    err.textContent = "Something went wrong. Please try again or write to us on WhatsApp.";
+    err.style.display = "block";
+  }
+});
+</script>
+</body>
+</html>
