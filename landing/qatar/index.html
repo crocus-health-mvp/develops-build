@@ -271,6 +271,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
           <div><label for="phone">Phone / WhatsApp</label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+974" required></div>
           <div><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
         </div>
+        <label for="linkedin">LinkedIn profile <span style="font-weight:600;color:#8a94a0">— optional, helps us prepare for the call</span></label>
+        <input id="linkedin" name="linkedin" type="url" inputmode="url" autocomplete="url" placeholder="linkedin.com/in/your-name">
         <label class="consent"><input type="checkbox" id="consent" required> I agree that Develops may contact me about the pilot and process my details for this purpose.</label>
         <button class="btn" type="submit" id="submit">Apply for the pilot</button>
         <p class="err" id="err">Please fill in all fields and confirm the consent.</p>
@@ -331,6 +333,7 @@ document.getElementById("lead").addEventListener("submit", async e => {
   else if (!document.getElementById("consent").checked) msg = "Please tick the consent box.";
   if (msg) { err.textContent = msg; err.style.display = "block"; const f0 = missing ? document.getElementById(missing) : null; if (f0) f0.focus(); return; }
   err.style.display = "none"; btn.disabled = true; btn.textContent = "Sending…";
+  if (data.linkedin) { data.linkedin = data.linkedin.trim(); if (data.linkedin && !/^https?:\/\//i.test(data.linkedin)) data.linkedin = "https://" + data.linkedin; }
   const lead = { ...data, market: MARKET, sid, utm, page: location.href, ts: new Date().toISOString() };
   try {
     if (LEAD_ENDPOINT) {

@@ -43,7 +43,7 @@ export default {
       try { b = await req.json(); } catch (e) { return json({ ok: false }, 400, h); }
       const lead = {
         name: clip(b.name), company: clip(b.company), role: clip(b.role, 60), sites: clip(b.sites, 20),
-        phone: clip(b.phone, 40), email: clip(b.email, 120), market: clip(b.market, 20),
+        phone: clip(b.phone, 40), email: clip(b.email, 120), linkedin: clip(b.linkedin, 200), market: clip(b.market, 20),
         utm: b.utm && typeof b.utm === "object" ? Object.fromEntries(Object.entries(b.utm).map(([k, v]) => [clip(k, 30), clip(v, 120)])) : {},
         ts: new Date().toISOString(),
       };
@@ -56,6 +56,7 @@ export default {
           `${lead.name} · ${lead.role}`,
           `Компания: ${lead.company} · объектов: ${lead.sites}`,
           `Тел: ${lead.phone}`, `Почта: ${lead.email}`,
+          ...(lead.linkedin ? [`LinkedIn: ${lead.linkedin}`] : []),
           `Источник: ${lead.utm.utm_source || "direct"} ${lead.utm.utm_campaign || ""}`,
         ].join("\n");
         try {
