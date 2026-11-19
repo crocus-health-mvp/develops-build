@@ -68,6 +68,21 @@ export default {
       return json({ ok: true }, 200, h);
     }
 
+    // Найти ID чатов, куда добавлен бот (для настройки TG_CHAT)
+    if (req.method === "GET" && url.pathname === "/tg-chats") {
+      if (!env.ADMIN_KEY || url.searchParams.get("key") !== env.ADMIN_KEY) return json({ ok: false }, 403, h);
+      if (!env.TG_TOKEN) return json({ ok: false, error: "TG_TOKEN не задан" }, 400, h);
+      const r = await fetch(`https://api.telegram.org/bot${env.TG_TOKEN}/getUpdates`);
+      const d = await r.json();
+      if (!d.ok) return json({ ok: false, error: "Telegram: " + (d.description || "ошибка") }, 400, h);
+      const chats = {};
+      for (const u of d.result || []) {
+        const c = (u.message || u.my_chat_member || u.channel_post || u.edited_message || {}).chat;
+        if (c) chats[c.id] = { id: c.id, title: c.title || c.first_name || "", type: c.type };
+      }
+      return json({ ok: true, chats: Object.values(chats), hint: "Пусто — напишите сообщение в группе и обновите страницу" }, 200, h);
+    }
+
     if (req.method === "GET" && url.pathname === "/stats") {
       if (!env.ADMIN_KEY || url.searchParams.get("key") !== env.ADMIN_KEY) return json({ ok: false }, 403, h);
       const funnel = {};
